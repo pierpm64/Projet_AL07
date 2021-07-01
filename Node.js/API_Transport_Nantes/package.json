@@ -9,9 +9,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "date-fns": "^2.22.1",
     "express": "^4.17.1",
     "mongodb": "^3.6.5",
+    "node-schedule": "^2.0.0",
     "request": "^2.88.2"
   }
 }

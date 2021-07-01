@@ -3,8 +3,9 @@
 // By PierPM _ 20210621
 
 
-var express = require('express');
-var transportNantesApiRoutes = require('./transport-nantes-api-routes');
+const express = require('express');
+const transportNantesApiRoutes = require('./transport-nantes-api-routes');
+const api_tan = require('./api_tan_v1');
 var app = express();
 
 //support parsing of JSON post data
@@ -12,9 +13,17 @@ var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json() ;
 app.use(jsonParser);
 
+// open cors
+const cors = require('cors');
+app.use(cors());
 
-app.use(transportNantes.apiRouter); //delegate REST API routes to apiRouter(s)
+//delegate REST API routes to apiRouter(s)
+app.use(transportNantesApiRoutes.apiRouter); 
 
-app.listen(8282 , function () {
-    console.log("Le Serveur Node.js ecoute sur le port 8282");
+// get envrun and port
+let envrun = api_tan.getEnvParam("envrun","devt")
+let portNum = api_tan.getEnvParam("NodePort",8282)
+
+app.listen(portNum , function () {
+    console.log("Le Serveur Node.js ecoute sur le port " + portNum + " (envrun=" + envrun + ")");
 });

@@ -8,6 +8,7 @@
 const request = require('request');
 const addMinutes = require('date-fns/addMinutes');
 const addSeconds = require('date-fns/addSeconds');
+const { json } = require('express');
 
 // Determination prefix api TAN a appeler selon contexte
 var apiPrefix = "http://open_preprod.tan.fr/ewp/";
@@ -22,8 +23,8 @@ function getTanStations(latitude=0,longitude=0) {
 	return new Promise (resolve => {
 		// controle parametres bien numeriques
 		if (isNaN(latitude) || isNaN(longitude) ) {
-			console.log("getTanStation parameters : longitude et lattitude doivent etre numerique !")
-;			resolve(undefined) ;
+			console.log("getTanStation parameters : longitude et lattitude doivent etre numerique !");
+			resolve(undefined) ;
 			return;
 		}
 		// formatage parametres en format francais
@@ -45,6 +46,45 @@ function getTanStations(latitude=0,longitude=0) {
 			let lstAllLieux = [];
 			if (lstStations !== undefined ) {
 				for  (let station of lstStations) {
+					/* let lstLignes = [];
+					for (let ligne of station.ligne) {
+						lstLignes.push(ligne.numLigne);
+					} */
+					let detailLieu = {
+						"lieu" : station.codeLieu,
+						"libelle": station.libelle,
+						"distance" : station.distance,
+		//				"lignes" : lstLignes
+					}
+					lstAllLieux.push(detailLieu);
+				}
+			}
+			resolve(lstAllLieux);
+		});
+	});
+}
+
+
+
+// recupere la liste de tous les stations 
+function getAllTanStations() {
+	return new Promise (resolve => {
+		// appel API TAN
+		let urlRequest = apiPrefix + "arrets.json";
+		console.log("getAllTanStations url : " + urlRequest + " - at : " + getCurDateTime());
+		request(urlRequest, { json: true }, (err, res, body) => {
+			if (err) { console.log(err);resolve(undefined) ;return }
+			let lstStations = res.body;
+			// si pas de lieu trouvé proche adresse GPS, on considere API ne ramene rien 
+			if (lstStations.toString() === "" || lstStations === undefined  ) {
+				resolve(undefined);
+				return;
+			}
+			
+			// si pas undefined (erreur parametres api ou resultat vide), on reformate
+			let lstAllLieux = [];
+			if (lstStations !== undefined ) {
+				for  (let station of lstStations) {
 					let lstLignes = [];
 					for (let ligne of station.ligne) {
 						lstLignes.push(ligne.numLigne);
@@ -52,7 +92,6 @@ function getTanStations(latitude=0,longitude=0) {
 					let detailLieu = {
 						"lieu" : station.codeLieu,
 						"libelle": station.libelle,
-						"distance" : station.distance,
 						"lignes" : lstLignes
 					}
 					lstAllLieux.push(detailLieu);
@@ -62,6 +101,7 @@ function getTanStations(latitude=0,longitude=0) {
 		});
 	});
 }
+
 
 // recupere les horaires prévus pour une station, une ligne, une direction
 function getTanPlannedTime(station="null",ligne="0",sens=0) {
@@ -78,7 +118,7 @@ function getTanPlannedTime(station="null",ligne="0",sens=0) {
 			}
 			
 			// si pas undefined (erreur parametres api ou resultat vide), on formate
-			let detPlannedTime = new Map();
+			let detPlannedTime = {};
 			let detHoraires = lstHoraires["horaires"];
 			if (detHoraires !== undefined) {
 		
@@ -93,16 +133,23 @@ function getTanPlannedTime(station="null",ligne="0",sens=0) {
 	
 			} 
 			// construction et renvoie de l'objet réponse 
-			let infoHoraires = {
-				"lieu" : station,
-				"sens" : sens,
-				"ligne" : lstHoraires.ligne.numLigne ,
-				"sens1" :  lstHoraires.ligne.directionSens1 ,
-				"sens2" :  lstHoraires.ligne.directionSens2 ,
-				"horaires" : detPlannedTime
+			if (lstHoraires['ligne'] === undefined) {
+				console.log("getTanPlanedTime url : " + urlRequest + 
+					" / resultats incoherrents : " + JSON.stringify(lstHoraires))
+				resolve(undefined);
+			} 
+			else {
+				let infoHoraires = {
+					"lieu" : station,
+					"sens" : sens,
+					"ligne" : ligne,
+					"sens1" :  lstHoraires.ligne.directionSens1 ,
+					"sens2" :  lstHoraires.ligne.directionSens2 ,
+					"horaires" : detPlannedTime
+				}
+				
+				resolve(infoHoraires);
 			}
-			
-			resolve(infoHoraires);
 
 		});
 	});
@@ -111,7 +158,8 @@ function getTanPlannedTime(station="null",ligne="0",sens=0) {
 // recupere les horaires reels pour une station
 function getTanRealTime(station="null") {
 	return new Promise (resolve => {
-		let urlRequest = apiPrefix + "tempsattente.json/" + station;
+		// let urlRequest = apiPrefix + "tempsattente.json/" + station;
+		let urlRequest = apiPrefixProd  + "tempsattente.json/" + station;
 		console.log("getTanRealTime url : " + urlRequest + " - at : " + getCurDateTime()) ;
 		var lstTypesLignes = ["null","Tramway","Busway","Bus","Navibus"];
 		request(urlRequest, { json: true }, (err, res, body) => {
@@ -127,9 +175,11 @@ function getTanRealTime(station="null") {
 			// Recuperation date execution, arrondie (à la minutes superieure)
 			let datCurR = new Date();
 			let datCur = addSeconds(datCurR,30)
+			let datcurmm = datCur.getMonth() + 1;
+			let timcurhh = datCur.getHours().toString().padStart(2,"0")
 			// formatage date heure courante
-			let datCurForm = datCur.getFullYear() + datCur.getMonth().toString().padStart(2,"0") +
-					datCur.getDate().toString().padStart(2,"0") 
+			let datCurForm = datCur.getFullYear() + '-' + datcurmm.toString().padStart(2,"0") +
+					'-' + datCur.getDate().toString().padStart(2,"0") 
 			let timeCurForm = datCur.getHours().toString().padStart(2,"0") + 
 					datCur.getMinutes().toString().padStart(2,"0") + datCur.getSeconds().toString().padStart(2,"0") + 
 					"." + datCur.getMilliseconds().toString().padStart(3,"0")
@@ -163,6 +213,7 @@ function getTanRealTime(station="null") {
 					lstHoraires = {
 						"ligne" : trajet.ligne.numLigne , 
 						"sens" : trajet.sens ,
+						"realTime" :  trajet.tempsReel ,
 						"codeType" : trajet.ligne.typeLigne,
 						"libeType" : lstTypesLignes[trajet.ligne.typeLigne],
 						"terminus" : trajet.terminus,
@@ -192,6 +243,7 @@ function getTanRealTime(station="null") {
 			let objTimeAll = {
 				"lieu" : station,
 				"date" : datCurForm,
+				"heure" : timcurhh,
 				"time" : timeCurForm,
 				"horaires" : lstTimes
 			}
@@ -216,7 +268,8 @@ function getEnvParam(param,defaut=undefined) {
 
 // recupere la date courante et la formate
 function getCurDateTime(curDate=new Date()) {
-	let datCurForm = curDate.getFullYear() + "/" + curDate.getMonth().toString().padStart(2,"0") +
+	let curMonth = curDate.getMonth() + 1;
+	let datCurForm = curDate.getFullYear() + "/" + curMonth.toString().padStart(2,"0") +
 					"/" + curDate.getDate().toString().padStart(2,"0") 
 	let timeCurForm = curDate.getHours().toString().padStart(2,"0") + ":" +
 					curDate.getMinutes().toString().padStart(2,"0") + ':' + 
@@ -225,7 +278,50 @@ function getCurDateTime(curDate=new Date()) {
 	return datCurForm + " " + timeCurForm;
 }
 
-// export Tan Functions
+// function de retour générique
+let funcRet = function(param=undefined)
+{  
+	return new Promise (
+		resolve => {
+			resolve(param)
+		}
+	);
+};
+
+
+// function générique avec callbacl
+async function GenericAsync(ParFunc={},
+	callback=funcRet) {
+    let retour  = await ParFunc;
+	return callback(retour);
+}
+
+
+// function de récupération des variables d'environnement, ramene un objet
+function getAllEnvParms(param=undefined,valdef=undefined) {
+	let env = process.env;
+	let objParms = {};
+	if (param !== undefined) {
+		if (env[param] !== undefined) {
+			objParms[param] = env[param];
+		} else {
+			objParms[param] = valdef;
+		}
+	}
+	else {
+		for (let valpar  in env) {
+			objParms[valpar] = env[valpar];
+		}
+	}	
+	return objParms;
+}
+
+// export All Functions
 exports.getTanStations = getTanStations;
+exports.getAllTanStations = getAllTanStations;
 exports.getTanPlannedTime = getTanPlannedTime;
 exports.getTanRealTime = getTanRealTime;
+exports.getEnvParam = getEnvParam;
+exports.getCurDateTime = getCurDateTime;
+exports.GenericAsync = GenericAsync;
+exports.getAllEnvParms = getAllEnvParms;

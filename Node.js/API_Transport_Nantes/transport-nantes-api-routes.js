@@ -2,15 +2,112 @@
 // Projet fin de cycle AL07 - Juillet 2021
 // by PierPM
 var express = require('express');
+const api_tan  = require('./api_tan_v1');
 const apiRouter = express.Router();
 
 var myGenericMongoClient = require('./my_generic_mongo_client');
+
+// Async function to call TAN API
+async function AppelApi(parfunc=api_tan.GenericAsync(api_tan.getTanStations(47.2133057,-1.5604042)),
+retour=function(par){console.log("demo :" + JSON.stringify(par))}) {
+    let demo = await parfunc 
+    retour(demo);
+    // console.log("demo : " + JSON.stringify(demo));
+}
+
+//exemple URL: http://localhost:8282/transport-nantes-api/public/Station (retoune toutes les lignes pour une station )
+apiRouter.route('/transport-nantes-api/public/station/:code')
+	.get(function (req, res, next) {
+		var Codestation = req.params.code;
+		myGenericMongoClient.genericFindList('TanAllStations', {_id : Codestation},
+			function (err, station) {
+				console.log("station trouvé : " + station)
+				if (station == null || station == "")
+					res.status(404).send({ err: "Station non trouvée" });
+				else
+					res.send(station);
+			});
+		});//end of genericFindList()
+
+
+//exemple URL: http://localhost:8282/transport-nantes-api/public/plannedtime?station=...&ligne=...&date==...
+//  (retoune les horaires prévus)
+apiRouter.route('/transport-nantes-api/public/plannedtime')
+	.get(function (req, res, next) {
+		var Codestation = req.query.station;
+		var Codeligne = req.query.ligne;
+		var datepar = req.query.date;
+		var senspar = req.query.sens;
+		// construction query selon parametres passés
+		querytest = {};
+		if (Codestation !== undefined) {
+			querytest["lieu"] = Codestation
+		}
+		if (Codeligne !== undefined) {
+			querytest["ligne"] = Codeligne;
+		}
+		if (datepar !== undefined) {
+			querytest["date"] = datepar;
+		}
+		if (senspar !== undefined && !isNaN(senspar)) {
+
+			querytest["sens"] = Number(senspar);
+		}
+		console.log("GET,TanPlannedTime,Query:" + JSON.stringify(querytest));
+		// Recherche infos dans MongoDB
+		myGenericMongoClient.genericFindList('TanPlannedTime',querytest,
+			function (err, horaires) {
+				if (horaires == null || horaires == "")
+					res.status(404).send({ err: "Horaires planifié non trouvé" });
+				else
+					res.send(horaires);
+			});
+		});//end of getPlannedTime()
+
+//exemple URL: http://localhost:8282/transport-nantes-api/public/plannedtime?station=...&ligne=...&date==...
+//  (retoune les horaires prévus)
+apiRouter.route('/transport-nantes-api/public/realtime')
+	.get(function (req, res, next) {
+		var Codestation = req.query.station;
+		var Codeligne = req.query.ligne;
+		var datepar = req.query.date;
+		var heurepar = req.query.heure;
+		var senspar = req.query.sens;
+		// construction query selon parametres passés
+		querytest = {};
+		if (Codeligne !== undefined) {
+			querytest["ligne"] = Codeligne;
+		}
+		if (Codestation !== undefined) {
+			querytest["lieu"] = Codestation;
+		}
+		if (datepar !== undefined) {
+			querytest["date"] = datepar;
+		}
+		if (heurepar !== undefined) {
+			querytest["heure"] = heurepar;
+		}
+		if (senspar !== undefined && !isNaN(senspar)) {
+
+			querytest["sens"] = Number(senspar);
+		}
+		console.log("GET,TanRealTime,Query:" + JSON.stringify(querytest));
+		// Recherche infos dans MongoDB
+		myGenericMongoClient.genericFindList('TanRealTime',querytest,
+			function (err, horaires) {
+				if (horaires == null || horaires == "")
+					res.status(404).send({ err: "Horaires Reel non trouvé" });
+				else
+					res.send(horaires);
+			});
+		});//end of getRealTime()
+
 
 //exemple URL: http://localhost:8282/transport-nantes-api/public/lieu/Bourse
 apiRouter.route('/transport-nantes-api/public/lieu/:code')
 	.get(function (req, res, next) {
 		var codeLieu = req.params.code;
-		myGenericMongoClient.genericFindOne('lieu',
+		myGenericMongoClient.genericFindOne('lieus',
 			{ 'lieu': codeLieu },
 			function (err, lieu) {
 				if (lieu == null)
@@ -21,46 +118,74 @@ apiRouter.route('/transport-nantes-api/public/lieu/:code')
 
 	});
 
-//exemple URL: http://localhost:8282/transport-nantes-api/public/lieu (retoune tous les lieux )
-apiRouter.route('/transport-nantes-api/public/lieu')
-	.get(function (req, res, next) 
-		myGenericMongoClient.genericFindList('lieus', function (err, lieux) {
-			res.send(lieux);
+//exemple URL: http://localhost:8282/transport-nantes-api/public/lstLieus (retoune tous les lieux )
+apiRouter.route('/transport-nantes-api/public/lstLieus')
+	.get(function (req, res, next) {
+		myGenericMongoClient.genericFindList('lieus', {},function (err, lieus) {
+			res.send(lieus);
 		});//end of genericFindList()
 	});
 
 // http://localhost:8282/transport-nantes-api/private/role-admin/lieu en mode post
-// avec { "lieu" : "libel court" , "nom" : "libel long" , description : "description long", lattitude" : 123, longitude : 123 } 
+// avec { "lieu" : "libel court" , "nom" : "libel long" , description : "description long", latitude" : 123, longitude : 123 } 
 // dans req.body
 apiRouter.route('/transport-nantes-api/private/role-admin/lieu')
 	.post(function (req, res, next) {
 		var nouveauLieu = req.body;
 		console.log("POST,nouveauLieu=" + JSON.stringify(nouveauLieu));
+
+		let latitude = nouveauLieu.latitude;
+		if (isNaN(latitude)) {
+			res.status(500).send({ err: 'Latitude non numerique !' });
+		}
+
+		let longitude = nouveauLieu.longitude;
+		if (isNaN(longitude)) {
+			res.status(500).send({ err: 'longitude non numerique !' });
+		}
 		
 		// 1 - verification que le lieu n'existe pas en MongoDB
-		myGenericMongoClient.genericFindOne('lieu',
+		myGenericMongoClient.genericFindOne('lieus',
 			{ 'lieu': nouveauLieu.lieu },
 			function (err, lieu) {
 				if (lieu != null)
-					res.status(500).send({ err: 'lieu déjà existant' });
+					res.status(500).send({ err: "lieu '" + nouveauLieu.lieu + "' déjà existant" });
+				else {
+					nouveauLieu._id = nouveauLieu.lieu;
+					// 2 - verification qu'il y a bien des stations pou l'adresse GPS
+					AppelApi(parfunc=api_tan.GenericAsync(api_tan.getTanStations(latitude,longitude)),
+					function(par) {
+						lstLieus = par;
+						// console.log('liste lieux trouvés : ' + lstLieus);
+						if (lstLieus === undefined) {
+							res.status(500).send({ err: 'Aucune station pour cette adresse' });
+						}
+						else {
+							nouveauLieu.lstStations = lstLieus;
+							// 3 - Insertions en base
+							myGenericMongoClient.genericInsertOne('lieus',
+							nouveauLieu,
+							function (err, eId) {
+								if (err == null && eId != null)
+									res.send(nouveauLieu);
+								else
+									res.status(500).send({
+										err: "cannot insert in database",
+										cause: err
+									});
+							});
+
+						}
+					})
+
+				}
 			});
 			
+	
+
 		
-		// 
 
-
-		//nouveauLieu._id=nouveauLieu.code;
-		myGenericMongoClient.genericInsertOne('lieus',
-			nouveauLieuPourMongoAvecId,
-			function (err, eId) {
-				if (err == null && eId != null)
-					res.send(nouveauLieu);
-				else
-					res.status(500).send({
-						err: "cannot insert in database",
-						cause: err
-					});
-			});
+	
 	});
 
 // http://localhost:8282/transport-nantes-api/private/role-admin/lieu en mode PUT
@@ -84,18 +209,36 @@ apiRouter.route('/transport-nantes-api/private/role-admin/lieu')
 			});	//end of genericUpdateOne()
 	});
 
-// http://localhost:8282/transport-nantes-api/private/role-admin/lieu/EUR en mode DELETE
+// http://localhost:8282/transport-nantes-api/private/role-admin/lieu/COMM en mode DELETE
 apiRouter.route('/transport-nantes-api/private/role-admin/lieu/:code')
 	.delete(function (req, res, next) {
-		var codelieu = req.params.code;
-		console.log("DELETE,codelieu=" + codelieu);
-		myGenericMongoClient.genericDeleteOneById('lieus', codelieu,
+		var codelieu = req.params.code
+		console.log("DELETE,lieu=" + codelieu);
+		let query = { "lieu" : req.params.code}
+		// myGenericMongoClient.genericDeleteOneById('lieus', codelieu,
+		myGenericMongoClient.genericRemove('lieus',query,
 			function (err, isDeleted) {
+				console.log("resultat sur delete lieu : " + codelieu + " : " + isDeleted);
 				if (!isDeleted)
 					res.status(404).send({ err: "not found , no delete" });
 				else
 					res.send({ deletedlieuCode: codelieu });
 			});
+	});
+
+// http://localhost:8282/getLstEnvParms en mode Get ou
+// http://localhost:8282/getLstEnvParms?param=val en mode Get
+apiRouter.route('/GetLstEnvParms')
+	.get(function (req, res, next) { 
+		let Param = req.query.param;
+		let lstParms = api_tan.getAllEnvParms(Param);
+		if (Param !== undefined) {
+			if (lstParms[Param] === undefined) {
+				res.status(404).send({ err: "parametre '" + Param + "' non trouvé"});
+				return;
+			}
+		}
+		res.send(lstParms);
 	});
 
 exports.apiRouter = apiRouter;

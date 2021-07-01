@@ -3,11 +3,13 @@
 
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
+const api_tan  = require('./api_tan_v1');
 var assert = require('assert');
 
-var mongoDbUrl = 'mongodb://127.0.0.1:27017/Transport_Nantes'; //by default
-var dbName = "Transport_Nantes" //by default
+var mongoDbUrl = api_tan.getEnvParam('MongoUri','mongodb://localhost:27017');
+var dbName = api_tan.getEnvParam('MongoDb','tranport_nantes' );
 var currentDb=null; //current MongoDB connection
+console.log("MongoUri : " + mongoDbUrl + " / MongoDb : " + dbName);
 
 var setMongoDbUrl = function(dbUrl){
 	mongoDbUrl = dbUrl;
@@ -24,7 +26,7 @@ var closeCurrentMongoDBConnection = function(){
 
 var executeInMongoDbConnection = function(callback_with_db) {
   if(currentDb==null){
-    MongoClient.connect(mongoDbUrl, function(err, db) {
+    MongoClient.connect(mongoDbUrl, { useNewUrlParser: true, useUnifiedTopology: true },	function(err, db) {
 	if(err!=null) {
 		console.log("mongoDb connection error = " + err + " for dbUrl=" + mongoDbUrl );
 	}
@@ -80,13 +82,34 @@ var genericFindList = function(collectionName,query,callback_with_err_and_array)
 
 var genericRemove = function(collectionName,query,callback_with_err_and_result) {
 	executeInMongoDbConnection( function(db) {
-		db.collection(collectionName).remove(query ,function(err, obj) {
-		if(err!=null) {
-			console.log("genericRemove error = " + err);
-				}
-		//if (err) throw err;
-		console.log(obj.result.n + " document(s) deleted");
-		callback_with_err_and_result(err,obj.result);
+		db.collection(collectionName).deleteOne(query ,function(err, obj) {
+			if(err) {
+				console.log("genericRemove error = " + err);
+			}
+			//if (err) throw err;
+			let resdel = true;
+			if (obj.deletedCount < 1) {
+				resdel = false;
+			}
+			//console.log(obj.result.n + " document(s) deleted / details : " + JSON.stringify(obj) +
+			//						 " / resdel : " + resdel );
+			callback_with_err_and_result(err,resdel);
+		});
+   });
+};
+
+var genericDelAll = function(collectionName,query,callback_with_err_and_result) {
+	executeInMongoDbConnection( function(db) {
+		db.collection(collectionName).deletMany(query ,function(err, obj) {
+			if(err) {
+				console.log("genericRemove error = " + err);
+			}
+			//if (err) throw err;
+			let resdel = true;
+			if (obj.deletedCount < 1) {
+				resdel = false;
+			}
+			callback_with_err_and_result(err,resdel);
 		});
    });
 };
@@ -124,6 +147,7 @@ exports.genericFindList = genericFindList;
 exports.genericFindOne = genericFindOne;
 exports.genericRemove = genericRemove;
 exports.genericDeleteOneById = genericDeleteOneById;
+exports.genericDelAll = genericDelAll;
 exports.setMongoDbUrl = setMongoDbUrl;
 exports.setMongoDbName =setMongoDbName;
 exports.executeInMongoDbConnection = executeInMongoDbConnection;
