@@ -1,6 +1,0 @@
-fr\isika_al07\microservice_utilisateur\dao\UtilisateurRepository.class
-fr\isika_al07\microservice_utilisateur\exception\UtilisateurInexistantException.class
-fr\isika_al07\microservice_utilisateur\exception\CreationUtilisateurImpossibleException.class
-fr\isika_al07\microservice_utilisateur\http\controler\UtilisateurControler.class
-fr\isika_al07\microservice_utilisateur\MicroserviceUtilisateurApplication.class
-fr\isika_al07\microservice_utilisateur\model\Utilisateur.class
