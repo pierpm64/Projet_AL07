@@ -51,8 +51,7 @@ function getAWSBucketDirectory() {
 			let datModstr  = file.LastModified ;
 			let dateMod = new Date(datModstr);
 
-			console.log("fichier : " + file.Key + " / modified : " +datModstr + 
-			" / " + getCurDateTime(dateMod) + " / taille " + file.Size);
+			" /  (Local) " + getCurDateTime(dateMod) + " / taille " + file.Size);
 		}
 	})
 }
