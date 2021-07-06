@@ -1,4 +1,4 @@
-// Module d'appel des apis S3 TAN
+// Module d'appel des apis S3 pour voir les maj à télécharger
 // Projet AL07 - Juillet 2021
 // By PierPM
 
