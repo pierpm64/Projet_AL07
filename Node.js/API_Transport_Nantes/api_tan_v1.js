@@ -13,9 +13,12 @@ const { json } = require('express');
 // Determination prefix api TAN a appeler selon contexte
 var apiPrefix = "http://open_preprod.tan.fr/ewp/";
 var apiPrefixProd = "http://open.tan.fr/ewp/"
-if (getEnvParam("envrun") === "prod") {
+const envrun = getEnvParam("envrun","rect");
+if (envrun === "prod") {
 	apiPrefix = apiPrefixProd;
 }
+
+console.log("api_tan_v1 - Environnement Run : " + envrun + " / prefix api TAN : " + apiPrefix);
 
 
 // recupere la liste des stations pour une lattitude et longitude
