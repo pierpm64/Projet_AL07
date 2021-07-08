@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  apiPrefix: "http://prod.projet-al07-pierpm.com"
 };

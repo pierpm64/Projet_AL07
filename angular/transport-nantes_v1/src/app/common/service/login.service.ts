@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { LoginResponse } from '../data/loginpesponse';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class LoginService {
 
   //private _apiBaseUrl ="http://localhost:9998/utilisateur/utilisateurByEmailAndPassword/...; 
   // private _apiBaseUrl ="./login-api";
-  private _apiBaseUrl ="http://localhost:9998";
+  private _apiBaseUrl = environment.apiPrefix + ":9998";
 
 
   private _headers = new HttpHeaders({'Content-Type': 'application/json'}); 

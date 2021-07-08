@@ -15,9 +15,10 @@
       "prefix": "app",
       "architect": {
         "build": {
+          
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/transport_nantes-v1",
+            "outputPath": "dist/fiabilite_tan",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -36,7 +37,7 @@
             "scripts": []
           },
           "configurations": {
-            "production": {
+            "prod": {
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
@@ -62,9 +63,27 @@
                   "maximumError": "10kb"
                 }
               ]
-            }
+            },
+            "devt": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.devt.ts"
+                }
+              ]
+            },
+            "rect": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.rect.ts"
+                }
+              ]
+            },
+            
           }
         },
+        
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
