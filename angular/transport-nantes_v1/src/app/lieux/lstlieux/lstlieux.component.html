@@ -1,0 +1,39 @@
+<h3 style="color: midnightblue;">Liste de tous les Lieux</h3>
+
+<div class="row">
+    <div class="col-12 col-md-6 col-xl-4"  *ngFor="let lieu  of lstAllLieux">
+        <div class="card"  style="border: 1px solid midnightblue;background-color:whitesmoke;">
+            <div class="card-header text-white" style="background-color:midnightblue;font-size:large;font-weight: bold;"> 
+         {{ lieu.nom }} 
+        </div>
+        <textarea disabled style="border: 1px solid midnightblue;resize: none;background: rgb(205, 205, 223);
+        color:midnightblue">{{ lieu.description}}</textarea>
+        <p>longitude : {{ lieu.longitude }}  / latitude : {{ lieu.latitude }} /
+            <a  target="_blank" 
+            href="http://www.google.com/maps/place/{{ lieu.latitude}},{{ lieu.longitude }}/@/{{ lieu.latitude}},{{ lieu.longitude }}},17z/data=!3m1!1e3">google map</a> </p>
+        <p style="background-color:midnightblue ;color:mintcream">Liste Stations :</p>
+
+           
+        <table class="tabler">
+            <thead style="background:rgb(83, 83, 138);color: white;">
+                <tr>
+                    <th>Code</th>
+                    <th>libelle</th>
+                    <th>distance</th>
+                    <th>Horaires</th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let detailLieu  of lieu.lstStations"
+                 style="border: 1px solid #333;">
+                    <td>{{ detailLieu.lieu }}</td>
+                    <td>{{ detailLieu.libelle }}</td>
+                    <td>{{ detailLieu.distance }} </td>
+                    <td ><a [routerLink]="['/horaires',detailLieu.lieu]" >horaires</a></td>
+                </tr>
+            </tbody>
+        </table>
+
+      </div>
+  </div>
+</div>

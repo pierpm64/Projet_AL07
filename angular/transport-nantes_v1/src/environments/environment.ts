@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiPrefix: "http://rect.projet-al07-pierpm.com",
+  libEnv : "Machine Locale",
+  timeStamp: '2021/07/08 à 17:49:07'
 };
 
 /*

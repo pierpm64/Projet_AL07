@@ -1,11 +1,15 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MenuDefinition } from 'src/bs-util/data/MenuDefinition';
 import { PreferencesService } from '../common/service/preferences.service';
+import { connectedUserService } from '../common/service/connected-user.service';
+import { environment } from 'src/environments/environment';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
+  providers: [DatePipe]
 })
 export class HeaderComponent implements OnInit {
 
@@ -15,24 +19,53 @@ export class HeaderComponent implements OnInit {
   public couleurFondPrefereeLocale : string = "lightgrey";
   public couleurTextePrefereeLocale : string = "black";
 
+  public UserConnectedLocal : string = null;
+
+  public envBld : string = environment.libEnv;
+  public dateHeureBld : string = environment.timeStamp;
+
+  private curEmail : String = null;
+  private isAdm : boolean = false;
 
 
-  myMenuDef : MenuDefinition[] = [
+  
+  
+  private myMenuDefault : MenuDefinition[] = [
     { label : "Fichier" , 
       children : [
-        { label : "Login" , path : "/ngr-login" } ,
-        { label : "Accueil" , path : "/ngr-welcome" },
+        { label : "Login" , path : "/login" } ,
+        { label : "Accueil" , path : "/welcome" },
         { divider : true },
-        { label : "Mes lieux" , path : "/ngr-myplaces" },
-        { label : "Tous les lieux" , path : "/ngr-allplaces" }
+        { label : "Tous les lieux" , path : "/allplaces" }
       ]
     },
-    // { label : "basic" , path : "/ngr-basic" } , 
-    // { label : "welcome" , path : "/ngr-welcome" }
+    ];
+
+  
+
+
+
+  public myMenuDef : MenuDefinition[] = [
+    { label : "Fichier" , 
+      children : [
+        { label : "Login" , path : "/login" } ,
+        { label : "Accueil" , path : "/welcome" },
+        { divider : true },
+        { label : "Tous les lieux" , path : "/allplaces" }
+      ]
+    },
     ];
 
  
-    constructor(private _preferencesService : PreferencesService) {
+    constructor(private _preferencesService : PreferencesService,
+                private _connectUserService : connectedUserService,
+                private datePipe: DatePipe) 
+      {
+
+
+      
+      //this.dateHeureBld = this.datePipe.transform(this.dateBld,"yyyy/MM/dd HH:mm:ss");
+      // console.log('DateBld : ' + this.dateBld + " / " + this.dateHeureBld )
       //synchronisation de la "copie locale" :
       this._preferencesService.couleurFondPrefereeObservable
       .subscribe(
@@ -47,12 +80,66 @@ export class HeaderComponent implements OnInit {
             }
             this.couleurFondPrefereeLocale=couleurFondPreferee;}
       );
+
+      this._connectUserService.getConnectedUserObservable
+      .subscribe(
+        //callback éventuellement re-déclenchée plusieurs fois :
+        (EmailConnecte)=>{
+            console.log("Nouvel emailConnecté="+EmailConnecte)
+            
+            let objConnected = this.getConnectedUser();
+
+            // delete  this.myMenuDef;
+            this.myMenuDef = [];
+            this.myMenuDef.push(this.myMenuDefault[0]);
+
+            console.log("on passe par le refresh avec user : " + JSON.stringify(objConnected) + " - " + objConnected["email"]);
+            if (objConnected["email"] !== undefined) {
+
+              let objAdmuse = {
+                label : "Utilisateur" , 
+                children : [
+                  { label : "Deconnexion" , path : "/Deconnexion" } ,
+                  { label : "Mes lieux" , path : "/myplaces" }]
+              }
+              console.log("on ajoute ld mennu : " + JSON.stringify(objAdmuse))
+              this.myMenuDef.push(objAdmuse);
+            }
+            // console.log("conteu menu str  2 : " + JSON.stringify(this.myMenuDef) )
+             
+          
+          
+          }
+      );
+
+
+
+
+     
      }
   
   
 
   ngOnInit(): void {
+
    
+  }
+
+
+  getConnectedUser() : Object {
+    let strLogin = sessionStorage.getItem('curUser');
+    let objLogin = {};
+    if (strLogin != null) {
+      objLogin = JSON.parse(strLogin);
+      console.log("email on header : " + objLogin["email"]  + " / isadmin : " 
+      + objLogin["isAdmin"])
+      this.curEmail = objLogin["email"];
+      this.isAdm = objLogin["isAdmin"];
+
+
+    }
+    return objLogin
+
   }
 
 }

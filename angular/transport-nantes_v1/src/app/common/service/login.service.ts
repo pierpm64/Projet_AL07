@@ -6,6 +6,7 @@ import { tap } from 'rxjs/operators';
 import { map } from 'rxjs/operators';
 import { LoginResponse } from '../data/loginpesponse';
 import { environment } from 'src/environments/environment';
+import { connectedUserService } from './connected-user.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,22 @@ import { environment } from 'src/environments/environment';
 export class LoginService {
 
   //private _apiBaseUrl ="http://localhost:9998/utilisateur/utilisateurByEmailAndPassword/...; 
-  // private _apiBaseUrl ="./login-api";
   private _apiBaseUrl = environment.apiPrefix + ":9998";
 
+  private userLocal : string = null;
 
   private _headers = new HttpHeaders({'Content-Type': 'application/json'}); 
 
-  constructor(private _http : HttpClient) { }
+  constructor(private _http : HttpClient,
+    private _connecteduserService : connectedUserService) {
+
+      this._connecteduserService.getConnectedUserObservable
+      .subscribe(
+        //callback éventuellement re-déclenchée plusieurs fois :
+        (EmailConnecte)=>{
+            this.userLocal=EmailConnecte;}
+      );
+     }
 
   public Login$(user: string,password: string): Observable<LoginResponse>{
      let url = this._apiBaseUrl +"/utilisateur/utilisateurByEmailAndPassword/" + user + "/" + password;
@@ -32,6 +42,7 @@ export class LoginService {
      return this._http.get<LoginResponse>(url)
             .pipe(
                 tap((loginResponse)=>{ 
+                        this._connecteduserService.SetConnectedUser = null;
                         this.sauvegarderUser(loginResponse);}
                    )
             );
@@ -40,6 +51,8 @@ export class LoginService {
   private sauvegarderUser(loginResponse:LoginResponse){
        if(loginResponse.email){
          sessionStorage.setItem('curUser',JSON.stringify(loginResponse));
+         this._connecteduserService.SetConnectedUser=
+                    loginResponse.email;
          //ou autre façon de mémoriser le jeton
        }
        else{

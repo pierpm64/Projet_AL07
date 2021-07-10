@@ -13,6 +13,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { BsUtilModule } from 'src/bs-util/bs-util.module';
 import { MyAuthInterceptor } from './common/interceptor/my-auth.interceptor';
+import { LstlieuxComponent } from './lieux/lstlieux/lstlieux.component';
+import { HorairesComponent } from './horaires/horaires.component';
+import { LogoutComponent } from './logout/logout.component';
 
 
 
@@ -23,6 +26,9 @@ import { MyAuthInterceptor } from './common/interceptor/my-auth.interceptor';
     FooterComponent,
     LoginComponent,
     WelcomeComponent,
+    LstlieuxComponent,
+    HorairesComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,

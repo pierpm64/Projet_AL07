@@ -1,0 +1,84 @@
+<h3 style="color: midnightblue;">Détails horaires pour une station</h3>
+
+    
+    <h3 style="color:white;background-color:midnightblue;;">
+        Station : {{ codeStation }} / {{ libelStation }} </h3>
+
+    <div>
+    
+    <div class="row" >
+        <div class="col-6 col-md-4 col-xl-4">
+            <label for="lstTrajet">Choisissez une Ligne : </label>
+
+            <select name="lstTrajet" [(ngModel)]="Selectedligne" (ngModelChange)="onTrajetChange($event)">
+            <option  *ngFor="let trajet of lstTrajets" value="{{trajet.code}}">{{trajet.libel}}</option>
+
+            
+            </select>
+        </div>
+        <div class="col-1 col-md-1 col-xl-1"></div>
+        <div class="col-3 col-md-3 col-xl-3">
+
+            <label for="lstDates">Choissez une Date: </label>
+
+            <select name="lstDates" [(ngModel)]="SelectedDate" (ngModelChange)="onChange($event)">
+            <option  *ngFor="let horaire  of lstDate" value="{{horaire.datCrit}}">{{horaire.datDisp}}</option>
+            </select>
+        </div>
+
+        <div class="col-2 col-md-2 col-xl-3"></div>
+
+        <div class="col-1 col-md-1 col-xl-1">
+            <a role="button" class="btn btn-primary btn-sm" style="background: midnightblue;"
+            [routerLink]="['/allplaces']" >retour liste lieux</a>
+        </div>
+
+    </div>
+
+
+
+    </div>
+    <hr>
+
+    <div class="row" *ngIf="ResultSize > 0">
+    <div [ngClass]="
+    {'col-12 col-md-12 col-xl-12':ResultSize == 1,
+    'col-12 col-md-6 col-xl-6':ResultSize == 2
+    }" 
+     *ngFor="let horaire  of lstPlannedTime">
+        <div class="card"  style="border: 1px solid midnightblue;background-color:whitesmoke;">
+            <div class="card-header text-white" style="background-color:midnightblue;font-size:large;font-weight: bold;"> 
+         Horaires ligne {{ horaire.ligne }} / destination :  {{ horaire.destination }}
+            </div>
+
+           
+        <table class="tabler">
+            <thead style="background:rgb(83, 83, 138);color: white;">
+                <tr>
+                    <th>Planifié</th>
+                    <th>Réel</th>
+                </tr>
+            </thead>
+            <tbody >
+                <tr *ngFor="let detailHorire  of horaire.horaires"
+                 style="border: 1px solid #333;box-sizing: border-box; height: 100%;">
+                    <td><textarea disabled style="width:100%;height: 100%;resize: none;">{{detailHorire.plannedTime}}</textarea></td>
+                    <td><textarea disabled style="width:100%;height: 100%;resize: none;">{{detailHorire.realTime}}</textarea></td>
+                </tr>
+            </tbody>
+        </table>
+
+      </div>
+  </div>
+  </div>
+
+  <div  *ngIf="!lstPlannedTime" class="text-center">
+    <h3> pas de résultat pour l'instant !</h3>
+    <div> <img  class="img-fluid"  src="../../assets/images/Fiable_TAN_2.PNG"></div>
+</div>
+
+
+    
+
+
+

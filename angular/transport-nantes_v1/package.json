@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "timestamp": "node ./timestamp.js"
   },
   "private": true,
   "dependencies": {
@@ -20,8 +21,11 @@
     "@angular/platform-browser-dynamic": "~11.2.8",
     "@angular/router": "~11.2.8",
     "@fortawesome/fontawesome-free": "^5.15.1",
-    "bootstrap": "^4.5.3",
+    "bootstrap": "^5.0.2",
+    "light-server": "^2.9.1",
+    "moment-timezone": "^0.5.33",
     "ngx-bootstrap": "^6.2.0",
+    "replace-in-file": "^6.2.0",
     "rxjs": "~6.5.5",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
