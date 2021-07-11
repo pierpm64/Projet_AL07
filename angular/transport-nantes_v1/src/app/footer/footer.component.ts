@@ -8,10 +8,11 @@ import { PreferencesService } from '../common/service/preferences.service'
 })
 export class FooterComponent implements OnInit {
 
-  public couleurFondPrefereeLocale : string = "lightgrey";
+  public couleurFondPrefereeLocale : string = "green";
+  public couleurtext : string = "white";
 
-  public listeCouleurs : string[] = [ "lightyellow", "white",
-     "lightgrey" , "lightgreen" , "lightpink" , "lightblue", "blue","Midnightblue"] ;
+  public listeCouleurs : string[] = [ "green", "DarkGreen","ForestGreen",
+  "blue", "Navy","DarkBlue","MidnightBlue",'LimeGreen'] ;
 
 
   constructor(private _preferencesService : PreferencesService) {
@@ -27,6 +28,11 @@ export class FooterComponent implements OnInit {
   public onCouleurFondPrefereeLocaleChange(){
     this._preferencesService.couleurFondPreferee=
                     this.couleurFondPrefereeLocale;
+
+    switch (this.couleurFondPrefereeLocale) {
+      case "LimeGreen" : this.couleurtext = "Midnightblue";break;
+      default : this.couleurtext = "white"
+    }
   }
 
   ngOnInit(): void {

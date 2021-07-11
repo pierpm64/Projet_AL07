@@ -5,6 +5,7 @@ import { LogoutComponent } from './logout/logout.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { LstlieuxComponent} from './lieux/lstlieux/lstlieux.component';
 import { HorairesComponent } from './horaires/horaires.component';
+import { FavoritesLinesComponent } from './favorites-lines/favorites-lines.component';
 
 const routes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
@@ -13,6 +14,7 @@ const routes: Routes = [
   { path : 'allplaces', component : LstlieuxComponent},
   { path : 'horaires/:lieu', component : HorairesComponent},
   { path : 'Deconnexion', component : LogoutComponent},
+  {path : "myStations", component : FavoritesLinesComponent}
 
   // { path: 'basic', component: BasicComponent },
 ];

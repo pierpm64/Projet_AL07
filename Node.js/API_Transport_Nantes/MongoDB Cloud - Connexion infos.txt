@@ -1,0 +1,25 @@
+Avec compte Gmail : pierpm@gmail.com
+------------------------------------
+
+Serveur dans AWS - Ireland
+
+Pour node.js
+mongodb+srv://pierpm:Midoempi@AL07@cluster0.zpmhd.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+Pour compass :
+mongodb+srv://pierpm:Midoempi@AL07@cluster0.zpmhd.mongodb.net/test
+
+
+Avec compte Gmail : pierpm.pro@gmail.com
+----------------------------------------
+
+serveur dans AWS - Allemagne
+
+pour node.js
+mongodb+srv://pierpm:Midoempi@AL07@cluster0.ehndb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+
+pour compass :
+mongodb+srv://pierpm:Midoempi@AL07@cluster0.ehndb.mongodb.net/test
+
+
+

@@ -19,6 +19,7 @@ retour=function(par){console.log("demo :" + JSON.stringify(par))}) {
 apiRouter.route('/transport-nantes-api/public/station/:code')
 	.get(function (req, res, next) {
 		var Codestation = req.params.code;
+		console.log("GET,Station:" + Codestation);
 		myGenericMongoClient.genericFindList('TanAllStations', {_id : Codestation},
 			function (err, station) {
 				console.log("station trouvé : " + station)
@@ -107,6 +108,7 @@ apiRouter.route('/transport-nantes-api/public/realtime')
 apiRouter.route('/transport-nantes-api/public/lieu/:code')
 	.get(function (req, res, next) {
 		var codeLieu = req.params.code;
+		console.log("GET,lieus:" + codeLieu);
 		myGenericMongoClient.genericFindOne('lieus',
 			{ 'lieu': codeLieu },
 			function (err, lieu) {
@@ -121,6 +123,7 @@ apiRouter.route('/transport-nantes-api/public/lieu/:code')
 //exemple URL: http://localhost:8282/transport-nantes-api/public/lstLieus (retoune tous les lieux )
 apiRouter.route('/transport-nantes-api/public/lstLieus')
 	.get(function (req, res, next) {
+		console.log("GET,All lieus:");
 		myGenericMongoClient.genericFindList('lieus', {},function (err, lieus) {
 			res.send(lieus);
 		});//end of genericFindList()
@@ -231,6 +234,13 @@ apiRouter.route('/transport-nantes-api/private/role-admin/lieu/:code')
 apiRouter.route('/GetLstEnvParms')
 	.get(function (req, res, next) { 
 		let Param = req.query.param;
+		let password = req.query.password;
+		if (password !== "jyeWxqRuQH9CcK7XAPY36*Jz8r%EGVb4vSahgn$F5sTLZwdBkt") {
+			res.status(404).json({ err: "no access to this api"});
+			console.log("password en param : " + password);
+			return;
+		}
+		console.log("GET,parms:" + Param);
 		let lstParms = api_tan.getAllEnvParms(Param);
 		if (Param !== undefined) {
 			if (lstParms[Param] === undefined) {
@@ -241,4 +251,114 @@ apiRouter.route('/GetLstEnvParms')
 		res.send(lstParms);
 	});
 
+// Recuperation liste des favoris utilisateurs
+//exemple URL: http://localhost:8282/transport-nantes-api/public/favoris?email=&station=..
+//  (retoune les horaires prévus)
+apiRouter.route('/transport-nantes-api/public/favoris')
+	.get(function (req, res, next) {
+		var Codestation = req.query.station;
+		var email  = req.query.email;
+		let querytest = {};
+		if (Codestation !== undefined) {
+			querytest["station"] = Codestation;
+		}
+		if (email !== undefined) {
+			querytest["email"] = email;
+		}
+
+		console.log("GET,favoris,Query:" + JSON.stringify(querytest));
+		// Recherche infos dans MongoDB
+		myGenericMongoClient.genericFindList('favoris',querytest,
+			function (err, favoris) {
+				if (favoris == null || favoris == "")
+					res.status(404).send({ err: "favoris non trouvé" });
+				else
+					res.send(favoris);
+		})
+		;//end of getfavoris
+	});
+
+// Suppression, liste des favoris utilisateurs
+//exemple URL: http://localhost:8282/transport-nantes-api/public/favoris?email=&station=..
+apiRouter.route('/transport-nantes-api/public/favoris')
+.delete(function (req, res, next) {
+	var Codestation = req.query.station;
+	var email  = req.query.email;
+	let querytest = {};
+	if (Codestation !== undefined) {
+		querytest["station"] = Codestation;
+	}
+	if (email !== undefined) {
+		querytest["email"] = email;
+	}
+
+	console.log("Delete,favoris,Query:" + JSON.stringify(querytest));
+	// delete infos dans MongoDB
+	myGenericMongoClient.genericRemove('favoris',querytest,
+	function (err, isDeleted) {
+		console.log("resultat sur delete favoris : " + JSON.stringify(querytest) + " : " + isDeleted);
+		if (!isDeleted)
+			res.status(404).send({ err: "favoris not found , no delete" });
+		else
+			res.send({ deletedlieuCode: JSON.stringify(querytest) });
+	});
+	;//end of dlete
+});
+
+// Ajout,ajout favoris en base
+//exemple URL: http://localhost:8282/transport-nantes-api/public/favoris?email=&station=..
+// Add a favoris avec parametres passé
+apiRouter.route('/transport-nantes-api/public/favoris')
+.post(function (req, res, next) {
+	var Codestation = req.query.station;
+	var email  = req.query.email;
+	let querytest = {};
+	if (Codestation !== undefined) {
+		querytest["station"] = Codestation;
+	} else {
+		res.status(500).send({ err: 'Code Station non communiqué !' });
+		return;
+	}
+	if (email !== undefined) {
+		querytest["email"] = email;
+	} else {
+		res.status(500).send({ err: 'Email non communiqué !' });
+		return;
+	}
+
+	if (email !== undefined) {
+		querytest["email"] = email;
+	} else {
+		res.status(500).send({ err: 'Email non communiqué !' });
+		return;
+	}
+
+	console.log("Insert,favoris,Query:" + JSON.stringify(querytest));
+	// 1 - verification que le favoris n'existe pas en MongoDB
+
+	myGenericMongoClient.genericFindOne('favoris',
+	querytest,
+	function (err, lieu) {
+		if (lieu != null) {
+			res.status(500).send({ err: "favoris " + JSON.stringify(querytest) + " déjà existant" });
+		} else {
+			let favori = querytest;
+			let datCur = Date();
+			favori["date"] = datCur.toString();
+			// 2 - Insertions en base
+			myGenericMongoClient.genericInsertOne('favoris',
+			favori,
+			function (err, eId) {
+				if (err == null && eId != null)
+					res.send(favori);
+				else
+					res.status(500).send({
+						err: "cannot insert in database",
+						cause: err
+					});
+			});
+		}
+		});
+});
+		
 exports.apiRouter = apiRouter;

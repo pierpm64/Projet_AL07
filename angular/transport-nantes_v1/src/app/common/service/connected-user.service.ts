@@ -21,13 +21,24 @@ export class connectedUserService {
   }
 
   public get StoredEmail (){
-    let objstr = sessionStorage.getItem('CurUser');
+    let objstr = sessionStorage.getItem('curUser');
     let email = null;
     if (objstr !== null) {
       let objuser = JSON.parse(objstr);
       email = objuser["email"];
     }
     return email;
+
+  }
+
+ 
+  public get ObjStoredEmail (){
+    let objstr = sessionStorage.getItem('curUser');
+    let objres  = null;
+    if (objstr !== null) {
+      objres = JSON.parse(objstr);
+    }
+    return objres;
 
   }
 

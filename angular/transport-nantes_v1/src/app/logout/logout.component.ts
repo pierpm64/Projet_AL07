@@ -13,9 +13,9 @@ export class LogoutComponent implements OnInit {
     private router: Router,
     private _connectUserService : connectedUserService
   ) { 
-    this._connectUserService.getConnectedUserObservable
-    .subscribe(
-    );
+    //this._connectUserService.getConnectedUserObservable
+    //.subscribe(
+    // );
   }
 
   ngOnInit(): void {

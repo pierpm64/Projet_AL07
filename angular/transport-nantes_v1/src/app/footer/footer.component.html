@@ -1,5 +1,6 @@
-<p class="piedPage">footer - 
-  couleurFondPreferee:
+<p class="piedPage" 
+style="background-color:{{couleurFondPrefereeLocale}};color:{{couleurtext}};">
+  Couleur Contour :
     <select [(ngModel)]="couleurFondPrefereeLocale"
         (ngModelChange)="onCouleurFondPrefereeLocaleChange()" >
         <option *ngFor="let c of listeCouleurs" [ngValue]="c">

@@ -1,0 +1,35 @@
+<h3>Mes Stations Favorites !</h3>
+
+<span style="font-size: x-large;"  *ngIf="userConnected"> Bienvenue
+    {{userConnected.pseudo}} ( {{userConnected.prenom}} {{userConnected.nom}} )</span>
+
+
+<div  *ngIf="LstFavoris">
+<table class="tabler">
+    <thead style="background:rgb(83, 83, 138);color: white;">
+        <tr>
+            <th style="background: green;">Code Station</th>
+            <th style="background: green;">Libelle Station</th>
+            <th>Lignes </th>
+            <th>Date/heure Ajout Favori</th>
+            <th>Détails</th>
+        </tr>
+    </thead>
+    <tbody >
+        <tr *ngFor="let detailFav  of LstFavoris"
+         style="border: 1px solid #333;">
+            <td>{{ detailFav.station }}</td>
+            <td>{{ detailFav.libelle }}</td>
+            <td>{{ detailFav.lignes }} </td>
+            <td>{{ detailFav.datheure }} </td>
+            <td ><a [routerLink]="['/horaires',detailFav.station]" >horaires</a></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<div  *ngIf="!LstFavoris" class="text-center">
+    <h3>Pas de Favori pour l'instant !</h3>
+    <div> <img  class="img-fluid"  src="../../assets/images/Fiable_TAN_2.PNG"></div>
+</div>
+

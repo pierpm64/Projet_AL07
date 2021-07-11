@@ -16,6 +16,7 @@ import { MyAuthInterceptor } from './common/interceptor/my-auth.interceptor';
 import { LstlieuxComponent } from './lieux/lstlieux/lstlieux.component';
 import { HorairesComponent } from './horaires/horaires.component';
 import { LogoutComponent } from './logout/logout.component';
+import { FavoritesLinesComponent } from './favorites-lines/favorites-lines.component';
 
 
 
@@ -29,6 +30,7 @@ import { LogoutComponent } from './logout/logout.component';
     LstlieuxComponent,
     HorairesComponent,
     LogoutComponent,
+    FavoritesLinesComponent,
   ],
   imports: [
     BrowserModule,

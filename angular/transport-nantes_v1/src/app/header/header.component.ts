@@ -16,8 +16,8 @@ export class HeaderComponent implements OnInit {
   @Input()
   public titre :string ="default-title";
 
-  public couleurFondPrefereeLocale : string = "lightgrey";
-  public couleurTextePrefereeLocale : string = "black";
+  public couleurFondPrefereeLocale : string = "green";
+  public couleurTextePrefereeLocale : string = "white";
 
   public UserConnectedLocal : string = null;
 
@@ -36,7 +36,7 @@ export class HeaderComponent implements OnInit {
         { label : "Login" , path : "/login" } ,
         { label : "Accueil" , path : "/welcome" },
         { divider : true },
-        { label : "Tous les lieux" , path : "/allplaces" }
+        { label : "Liste Lieux" , path : "/allplaces" }
       ]
     },
     ];
@@ -51,7 +51,7 @@ export class HeaderComponent implements OnInit {
         { label : "Login" , path : "/login" } ,
         { label : "Accueil" , path : "/welcome" },
         { divider : true },
-        { label : "Tous les lieux" , path : "/allplaces" }
+        { label : "Liste Lieux" , path : "/allplaces" }
       ]
     },
     ];
@@ -72,13 +72,14 @@ export class HeaderComponent implements OnInit {
         //callback éventuellement re-déclenchée plusieurs fois :
         (couleurFondPreferee)=>{
             console.log("nouvelle couleurFondPreferee="+couleurFondPreferee)
-            if (couleurFondPreferee == "blue") {
-              this.couleurTextePrefereeLocale = "white";
+            switch (couleurFondPreferee) {
+              case "LimeGreen" : this.couleurTextePrefereeLocale = "Midnightblue";break;
+              default : this.couleurTextePrefereeLocale = "white";
             }
-            else {
-              this.couleurTextePrefereeLocale = "black";
-            }
-            this.couleurFondPrefereeLocale=couleurFondPreferee;}
+
+
+            this.couleurFondPrefereeLocale=couleurFondPreferee;
+        }
       );
 
       this._connectUserService.getConnectedUserObservable
@@ -100,7 +101,7 @@ export class HeaderComponent implements OnInit {
                 label : "Utilisateur" , 
                 children : [
                   { label : "Deconnexion" , path : "/Deconnexion" } ,
-                  { label : "Mes lieux" , path : "/myplaces" }]
+                  { label : "Mes Stations" , path : "/myStations" }]
               }
               console.log("on ajoute ld mennu : " + JSON.stringify(objAdmuse))
               this.myMenuDef.push(objAdmuse);

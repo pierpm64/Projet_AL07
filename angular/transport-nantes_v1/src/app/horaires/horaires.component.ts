@@ -5,9 +5,12 @@ import { GetStationService } from '../common/service/get-station.service';
 import { GetPlannedTimeService } from '../common/service/get-planned-time.service';
 import { GetRealTimeService } from '../common/service/get-real-time.service';
 import { getGenericresponse } from '../common/data/getGenericresponse';
+import { favoris } from '../common/service/favoris.service';
+import { connectedUserService } from '../common/service/connected-user.service';
 import { formatDate } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { environment } from '../../environments/environment';
 
 
 
@@ -42,6 +45,18 @@ export class HorairesComponent implements OnInit {
 
   public tstResult : String = '0';
 
+  private NumberDaysList : Number = 5;
+
+  public userConnected : Object = null;
+
+  public isFavorite : Object = null;
+
+  public DateFavorite : String = null;
+
+  public LstFavorites : Object[];
+
+ 
+
 
 
   constructor(
@@ -49,42 +64,72 @@ export class HorairesComponent implements OnInit {
     private router: Router,
     private _getStation : GetStationService,
     private _getPlannedTime : GetPlannedTimeService,
-    private _getRealTime : GetRealTimeService) { }
+    private _getRealTime : GetRealTimeService,
+    private _connectedInfo : connectedUserService,
+    private _favori : favoris) { }
   ;
 
 
   ngOnInit(): void {
-    console.log("valeut tstResult : "+ this.tstResult)
+    // Récupération parametres d'appel
     const routeParams = this.route.snapshot.paramMap;//lieu
     this.codeStation = routeParams.get('lieu');
-    // console.log("code station passée en parametre :" + this.codeStation )
-    // verification station passée existe
-    this._getStation.getStation(this.codeStation)
-    .subscribe({
-      next : (response :getGenericresponse) => { 
-        this.stationInfo = response[0];
-        this.libelStation = this.stationInfo["libelle"];
-        this.lstLignes = this.stationInfo["lignes"];
-
-
-
-      },
-      error : (err) => { console.log("error:"+JSON.stringify(err));
-               if (err.error.message) {
-                 console.log("erreur get Sation : " + err.error.message);    
-               } else {
-                 console.log("erreur technique sur get Station " + this.codeStation ); 
+    registerLocaleData(localeFr, 'fr');
+     // verification station passée existe
+     this._getStation.getStation(this.codeStation)
+     .subscribe({
+       next : (response :getGenericresponse) => { 
+         this.stationInfo = response[0];
+         this.libelStation = this.stationInfo["libelle"];
+         this.lstLignes = this.stationInfo["lignes"];
+ 
+ 
+ 
+       },
+       error : (err) => { console.log("error:"+JSON.stringify(err));
+                if (err.error.message) {
+                  console.log("erreur get Sation : " + err.error.message);    
+                } else {
+                  console.log("erreur technique sur get Station " + this.codeStation ); 
+                }
+                 this.router.navigate(['/allplaces']);
                }
-                this.router.navigate(['/allplaces']);
-              }
-      });
+       });
+    // recuperation nombre de jours à affichier
+    let numberofDays =  environment.NumberOfDay;
+    if (!isNaN(numberofDays)) {
+      this.NumberDaysList = numberofDays;
+    }
+    // Recupere email connecte
+    this.userConnected = this._connectedInfo.ObjStoredEmail
+   
+    // check si lieuu favori pou pas ...
+    if (this.userConnected != null)  {
+      let usrEmail = this.userConnected["email"];
+      this._favori.getfavori$(usrEmail,this.codeStation) 
+      .subscribe({
+        next : (response :getGenericresponse) => { 
+          this.isFavorite = response[0];
+          let datinfostr = this.isFavorite["date"];
+          let dateInfo = Date.parse(datinfostr);
+          let datForm = new Date(dateInfo);
+          this.DateFavorite = formatDate(datForm,'EEEE d MMMM yyyy à HH:mm:ss', 'fr');
+        },
+        error : (err) => { 
+          this.isFavorite = null;
+        }
+        });
+    }
+
+    // console.log("code station passée en parametre :" + this.codeStation )
+   
 
       // Init liste de dates
       let datnowstr = "";
-      registerLocaleData(localeFr, 'fr');
+      
       let DateLSt = []
-      for (let i = 0; i < 8; i++) { 
-        let d = new Date(); 
+      for (let i = 0; i <  this.NumberDaysList; i++) { 
+        let d = new Date(); ;
         d.setDate(d.getDate() - i);
         let todayString = d.toDateString();
         let valdats1 = formatDate(d,'yyyy-MM-dd', 'fr');
@@ -168,6 +213,37 @@ export class HorairesComponent implements OnInit {
        });
        
   };
+
+  AddFavorite() {
+    let usrEmail = this.userConnected["email"];
+      this._favori.addfavori$(usrEmail,this.codeStation) 
+      .subscribe({
+        next : (response :getGenericresponse) => { 
+          this.isFavorite = response;
+          let datinfostr = this.isFavorite["date"];
+          let dateInfo = Date.parse(datinfostr);
+          let datForm = new Date(dateInfo);
+           this.DateFavorite = formatDate(datForm,'EEEE d MMMM yyyy à HH:mm:ss', 'fr');
+        },
+        error : (err) => { 
+          this.isFavorite = null;
+        }
+        });
+  }
+
+  RemoveFavorite() {
+    let usrEmail = this.userConnected["email"];
+      this._favori.Delfavori$(usrEmail,this.codeStation) 
+      .subscribe({
+        next : (response :getGenericresponse) => { 
+          this.isFavorite = null;
+        },
+        error : (err) => { 
+        }
+        });
+  
+
+  }
 
   hashCode(s:string) {
     var h = 0, l = s.length, i = 0;
@@ -259,7 +335,7 @@ export class HorairesComponent implements OnInit {
               next : (response :getGenericresponse) => { 
                 let lstresult = response;
                 let objres = response[0];
-                console.log("output of getRealTime : " + JSON.stringify(objres) );
+                // console.log("output of getRealTime : " + JSON.stringify(objres) );
                 objheure["realTime"] = objres["horaires"];
               },
               error : (err) => { console.log("error:"+JSON.stringify(err));
@@ -331,6 +407,7 @@ export class HorairesComponent implements OnInit {
     })
 
   }
+
 
 
 
