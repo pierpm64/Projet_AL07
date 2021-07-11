@@ -10,7 +10,7 @@ export class PreferencesService {
 
   constructor() { 
     let c = localStorage.getItem('preferences.couleurFond');
-    c=c?c:'lightgrey';
+    c=c?c:'green';
     this._couleurFondPreferee$ = new BehaviorSubject<string>(c);
   }
 

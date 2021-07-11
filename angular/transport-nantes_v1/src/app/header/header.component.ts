@@ -106,7 +106,6 @@ export class HeaderComponent implements OnInit {
               console.log("on ajoute ld mennu : " + JSON.stringify(objAdmuse))
               this.myMenuDef.push(objAdmuse);
             }
-            // console.log("conteu menu str  2 : " + JSON.stringify(this.myMenuDef) )
              
           
           

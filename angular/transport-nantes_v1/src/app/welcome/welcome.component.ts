@@ -4,14 +4,20 @@ import { HttpClient  } from '@angular/common/http';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { formatDate } from '@angular/common';
+import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+
+
 
 
 @Component({
-  selector: 'app-welcome',
+  selector: 'ngbd-carousel-basic',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.scss']
 })
 export class WelcomeComponent implements OnInit {
+
+
+  images = [701, 800, 900, 920].map((n) => `https://al07-rect.s3.eu-west-3.amazonaws.com/images/${n}.png`);
 
   private loginInfoStr : string;
   public loginInfo : object = null;
@@ -21,8 +27,12 @@ export class WelcomeComponent implements OnInit {
   public browser : String = "Non Reconnu";
   public dateStr : String = "";
 
-  constructor(private http:HttpClient) {
+  constructor(private http:HttpClient,
+    config: NgbCarouselConfig) {
     this.date = new Date();
+    config.interval = 2800;
+    config.keyboard = true;
+    config.pauseOnHover = true;
     
    }
 

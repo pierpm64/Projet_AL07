@@ -17,6 +17,7 @@ import { LstlieuxComponent } from './lieux/lstlieux/lstlieux.component';
 import { HorairesComponent } from './horaires/horaires.component';
 import { LogoutComponent } from './logout/logout.component';
 import { FavoritesLinesComponent } from './favorites-lines/favorites-lines.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -39,7 +40,8 @@ import { FavoritesLinesComponent } from './favorites-lines/favorites-lines.compo
     FormsModule,
     BrowserAnimationsModule,
     TabsModule.forRoot(),
-    BsUtilModule
+    BsUtilModule,
+    NgbModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,
