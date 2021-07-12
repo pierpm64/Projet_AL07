@@ -3,6 +3,7 @@ import { Router} from '@angular/router';
 import { GetLstLieuxService } from '../../common/service/getlstlieux.service';
 import { lstlieuxresponse } from '../../common/data/lstlieuxresponse ';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'ngbd-modal-options',
@@ -31,9 +32,12 @@ export class LstlieuxComponent implements OnInit {
   constructor(
     private router: Router,
     private modalService: NgbModal,
-    private _getLstLieux :GetLstLieuxService ) { }
+    private _getLstLieux :GetLstLieuxService,
+    private location: Location ) { }
 
   ngOnInit(): void {
+    this.location.replaceState('/');
+    // recuperation liste des lieux en base
     this._getLstLieux.getAllLieux$()
     .subscribe({
       next : (response :lstlieuxresponse) => { 

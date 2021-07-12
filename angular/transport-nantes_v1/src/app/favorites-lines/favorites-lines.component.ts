@@ -11,6 +11,7 @@ import { formatDate } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { environment } from '../../environments/environment';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -29,10 +30,12 @@ export class FavoritesLinesComponent implements OnInit {
     private router: Router,
     private _getStation : GetStationService,
     private _connectedInfo : connectedUserService,
+    private location: Location,
     private _favori : favoris) { }
   ;
 
   ngOnInit(): void {
+    this.location.replaceState('/');
     // Recupere email connecte
     let Objuser = this._connectedInfo.ObjStoredEmail
     if ( Objuser == null) {

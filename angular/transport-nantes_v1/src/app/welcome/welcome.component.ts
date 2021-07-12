@@ -5,6 +5,7 @@ import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { formatDate } from '@angular/common';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import { Location } from '@angular/common';
 
 
 
@@ -28,6 +29,7 @@ export class WelcomeComponent implements OnInit {
   public dateStr : String = "";
 
   constructor(private http:HttpClient,
+    private location: Location,
     config: NgbCarouselConfig) {
     this.date = new Date();
     config.interval = 2800;
@@ -37,6 +39,7 @@ export class WelcomeComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    this.location.replaceState('/');
     // Recuperation browser et version :
     this.browser = this.myBrowser();
     // Formatage date et heure en francais

@@ -11,6 +11,7 @@ import { formatDate } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { environment } from '../../environments/environment';
+import { Location } from '@angular/common';
 
 
 
@@ -67,11 +68,13 @@ export class HorairesComponent implements OnInit {
     private _getPlannedTime : GetPlannedTimeService,
     private _getRealTime : GetRealTimeService,
     private _connectedInfo : connectedUserService,
+    private location: Location,
     private _favori : favoris) { }
   ;
 
 
   ngOnInit(): void {
+    this.location.replaceState('/');
     // Récupération parametres d'appel
     const routeParams = this.route.snapshot.paramMap;//lieu
     let lieuParm = routeParams.get('lieu');

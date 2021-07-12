@@ -4,6 +4,7 @@ import { Login } from '../common/data/login'
 import { LoginService } from '../common/service/login.service'
 import { LoginResponse } from '../common/data/loginpesponse';
 import { connectedUserService } from '../common/service/connected-user.service';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -21,6 +22,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private _loginService :LoginService,
+    private location: Location ,
     private _connectUserService : connectedUserService) {
       this._connectUserService.getConnectedUserObservable
       .subscribe(
@@ -57,5 +59,6 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.location.replaceState('/');
   }
 }
