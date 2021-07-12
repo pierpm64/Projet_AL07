@@ -1,16 +1,38 @@
 <h3 style="color: midnightblue;">Liste de tous les Lieux</h3>
 
+
+
+
 <div class="row">
     <div class="col-12 col-md-6 col-xl-4"  *ngFor="let lieu  of lstAllLieux">
+       
         <div class="card"  style="border: 1px solid midnightblue;background-color:whitesmoke;">
             <div class="card-header text-white" style="background-color:green;font-size:large;font-weight: bold;"> 
-         {{ lieu.nom }} 
+         {{ lieu.nom }}
         </div>
         <textarea disabled style="border: 1px solid midnightblue;resize: none;background: rgb(205, 205, 223);
         color:midnightblue">{{ lieu.description}}</textarea>
-        <p>longitude : {{ lieu.longitude }}  / latitude : {{ lieu.latitude }} /
-            <a  target="_blank" 
-            href="http://www.google.com/maps/place/{{ lieu.latitude}},{{ lieu.longitude }}/@/{{ lieu.latitude}},{{ lieu.longitude }}},17z/data=!3m1!1e3">google map</a> </p>
+        <div class="contentLieux">
+        <p>longitude : {{ lieu.longitude }}  / latitude : {{ lieu.latitude }} / 
+            <a  target="_blank"  class="btn btn-secondary btn-sm active" role="button" style="background-color:darkgreen"
+            href="http://www.google.com/maps/place/{{ lieu.latitude}},{{ lieu.longitude }}/@/{{ lieu.latitude}},{{ lieu.longitude }}},17z/data=!3m1!1e3">google map</a> 
+         </p>   
+
+         <ng-template #content let-modal>
+            <div class="modal-header">
+              <span Class="modal-title" 
+              style="background-color:green;color:white;;font-size:large;font-weight: bold;">
+              {{ lieu.nom }}</span>
+            </div>
+            <img src="https://al07-rect.s3.eu-west-3.amazonaws.com/images/{{ lieu.lieu }}.jpg"
+            alt="Image de {{ lieu.lieu }} ">
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Close click')">Close</button>
+            </div>
+          </ng-template>
+         <p style="text-align: center;"><button class="btn btn-outline-primary btn-sm" 
+            (click)="openBackDropCustomClass(content)" 
+             style="background-color:darkgreen;color: white;">Image du lieu</button></p>
         <p style="background-color:midnightblue ;color:mintcream">Liste Stations :</p>
 
            
@@ -24,15 +46,16 @@
                 </tr>
             </thead>
             <tbody >
-                <tr *ngFor="let detailLieu  of lieu.lstStations"
-                 style="border: 1px solid #333;">
+                <tr *ngFor="let detailLieu  of lieu.lstStations">
                     <td>{{ detailLieu.lieu }}</td>
                     <td>{{ detailLieu.libelle }}</td>
                     <td>{{ detailLieu.distance }} </td>
-                    <td ><a [routerLink]="['/horaires',detailLieu.lieu]" >horaires</a></td>
+                    <td ><a  class="btn btn-sm btn-outline-dark" role="button" 
+                        [routerLink]="['/horaires',detailLieu.lieu]" >horaires</a></td>
                 </tr>
             </tbody>
         </table>
+        </div>
         <p></p>
 
       </div>

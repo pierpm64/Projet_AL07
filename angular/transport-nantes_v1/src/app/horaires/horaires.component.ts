@@ -25,6 +25,7 @@ export class HorairesComponent implements OnInit {
 
   private stationInfo : object;
   public codeStation: String;
+  public ReqParm: String;
   public libelStation: String;
   public Selectedligne: String;
   public SelectedDate: String;
@@ -73,7 +74,12 @@ export class HorairesComponent implements OnInit {
   ngOnInit(): void {
     // Récupération parametres d'appel
     const routeParams = this.route.snapshot.paramMap;//lieu
-    this.codeStation = routeParams.get('lieu');
+    let lieuParm = routeParams.get('lieu');
+    let lstParm = lieuParm.split('_');
+    this.codeStation = lstParm[0];
+    this.ReqParm = lstParm[1];
+    // console.log("Station demandée : " + this.codeStation + )
+    //
     registerLocaleData(localeFr, 'fr');
      // verification station passée existe
      this._getStation.getStation(this.codeStation)

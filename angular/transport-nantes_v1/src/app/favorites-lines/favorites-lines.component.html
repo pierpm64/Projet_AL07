@@ -22,7 +22,9 @@
             <td>{{ detailFav.libelle }}</td>
             <td>{{ detailFav.lignes }} </td>
             <td>{{ detailFav.datheure }} </td>
-            <td ><a [routerLink]="['/horaires',detailFav.station]" >horaires</a></td>
+            <td> <a class="btn btn-sm" role="button" style="background-color: darkgreen;color: white;"
+            [routerLink]="['/horaires',detailFav.station + '_fav']" >horaires
+        </a></td>
         </tr>
     </tbody>
 </table>

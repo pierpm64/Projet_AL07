@@ -1,19 +1,36 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Router} from '@angular/router';
 import { GetLstLieuxService } from '../../common/service/getlstlieux.service';
 import { lstlieuxresponse } from '../../common/data/lstlieuxresponse ';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-  selector: 'app-lstlieux',
+  selector: 'ngbd-modal-options',
   templateUrl: './lstlieux.component.html',
-  styleUrls: ['./lstlieux.component.scss']
+  styleUrls: ['./lstlieux.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  styles: [`
+    .dark-modal .modal-content {
+      background-color: #292b2c;
+      color: white;
+    }
+    .dark-modal .close {
+      color: white;
+    }
+    .light-blue-backdrop {
+      background-color: #5cb3fd;
+    }
+  `]
 })
 export class LstlieuxComponent implements OnInit {
+
+  closeResult: string;
 
   public lstAllLieux : lstlieuxresponse = null;
 
   constructor(
     private router: Router,
+    private modalService: NgbModal,
     private _getLstLieux :GetLstLieuxService ) { }
 
   ngOnInit(): void {
@@ -35,6 +52,39 @@ export class LstlieuxComponent implements OnInit {
               }
       });
     }
+
+    
+  openBackDropCustomClass(content) {
+    this.modalService.open(content, {backdropClass: 'dark-blue-backdrop'});
+  }
+
+  openWindowCustomClass(content) {
+    this.modalService.open(content, { windowClass: 'dark-modal' });
+  }
+
+  openSm(content) {
+    this.modalService.open(content, { size: 'sm' });
+  }
+
+  openLg(content) {
+    this.modalService.open(content, { size: 'lg' });
+  }
+
+  openXl(content) {
+    this.modalService.open(content, { size: 'xl' });
+  }
+
+  openVerticallyCentered(content) {
+    this.modalService.open(content, { centered: true });
+  }
+
+  openScrollableContent(longContent) {
+    this.modalService.open(longContent, { scrollable: true });
+  }
+
+  openModalDialogCustomClass(content) {
+    this.modalService.open(content, { modalDialogClass: 'dark-modal' });
+  }
 
 
 }

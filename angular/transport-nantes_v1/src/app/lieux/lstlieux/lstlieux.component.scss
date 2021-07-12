@@ -48,11 +48,16 @@ table {
     background-color:rgb(187, 187, 212);
 }
 
+tr {
+  border: 1px solid #333;
+}
+
 tr:hover>td
 {
 background-color : darkblue;
 color: white;
 font-weight: 500;
 }
+
 
  
