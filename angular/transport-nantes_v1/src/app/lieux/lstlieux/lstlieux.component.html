@@ -13,11 +13,6 @@
         <textarea disabled style="border: 1px solid midnightblue;resize: none;background: rgb(205, 205, 223);
         color:midnightblue">{{ lieu.description}}</textarea>
         <div class="contentLieux">
-        <p>longitude : {{ lieu.longitude }}  / latitude : {{ lieu.latitude }} / 
-            <a  target="_blank"  class="btn btn-secondary btn-sm active" role="button" style="background-color:darkgreen"
-            href="http://www.google.com/maps/place/{{ lieu.latitude}},{{ lieu.longitude }}/@/{{ lieu.latitude}},{{ lieu.longitude }}},17z/data=!3m1!1e3">google map</a> 
-         </p>   
-
          <ng-template #content let-modal>
             <div class="modal-header">
               <span Class="modal-title" 
@@ -30,9 +25,16 @@
               <button type="button" class="btn btn-secondary btn-sm" (click)="modal.close('Close click')">Close</button>
             </div>
           </ng-template>
-         <p style="text-align: center;"><button class="btn btn-outline-primary btn-sm" 
+          <div class="d-grid gap-2 d-md-flex  d-flex justify-content-around">
+            longitude : {{ lieu.longitude }}  / latitude : {{ lieu.latitude }}
+            <a  target="_blank"  class="btn btn-outline-primary btn-sm" role="button" 
+            style="background-color:green;color: white;"
+            href="http://www.google.com/maps/place/{{ lieu.latitude}},{{ lieu.longitude }}/@/{{ lieu.latitude}},{{ lieu.longitude }}},17z/data=!3m1!1e3">google map</a> 
+          <button class="btn btn-outline-primary btn-sm" 
             (click)="openBackDropCustomClass(content)" 
-             style="background-color:darkgreen;color: white;">Image du lieu</button></p>
+             style="background-color:green;color: white;">Image du lieu</button>
+           
+         </div>
         <p style="background-color:midnightblue ;color:mintcream">Liste Stations :</p>
 
            
