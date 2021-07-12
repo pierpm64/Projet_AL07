@@ -7,23 +7,22 @@
     <div class="col-12 col-md-6 col-xl-4"   *ngFor="let lieu  of lstAllLieux">
        
         <div class="card"  style="border: 1px solid midnightblue;background-color:whitesmoke;">
-          <div class="card-header" 
-          style="background-color:green;font-size:large;font-weight: bold;color: white;"> 
-          <div class="row">
-            <div class="col-12 col-md-6 col-xl-8">{{ lieu.nom }}</div>
-            <div class="col-2 col-md-2 col-xl-2">
-          <a  target="_blank"  
-           type="button" class="btn btn-sm mybtn" 
-          href="http://www.google.com/maps/place/{{ lieu.latitude}},{{ lieu.longitude }}/@/{{ lieu.latitude}},{{ lieu.longitude }}},17z/data=!3m1!1e3">
-          Carte</a> 
-            </div>
-            <div class="col-1 col-md-1 col-xl-1">
-        <button class="btn  btn-sm mybtn" 
-          (click)="openBackDropCustomClass(content)" >
-           Image</button>
+          <div class="card-header d-flex justify-content-between mb-5" 
+          style="background-color:green;font-size:large;font-weight: bold;color: white;min-width:fit-content"> 
+          <pre style="background-color:green;font-size:large;font-weight: bold;color: white;
+          font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+          font-size: x-large;">{{ lieu.nom }}</pre>
+         
 
-          </div>
-       </div></div>
+          <a  target="_blank"  class="btn "  role="button" 
+          style="background-color:MediumSeaGreen;min-width:4em" 
+          href="http://www.google.com/maps/place/{{ lieu.latitude}},{{ lieu.longitude }}/@/{{ lieu.latitude}},{{ lieu.longitude }}},17z/data=!3m1!1e3">
+          <img src="../../../assets/images/Google_Maps_Logo_2020.svg"></a> 
+        <button class="btn  btn-sm " 
+          (click)="openBackDropCustomClass(content)" 
+           style="background-color:MediumSeaGreen;color: white;min-width:4em">Image</button>
+         
+       </div>
        <div >
          
         </div>
@@ -64,7 +63,8 @@
                     <td>{{ detailLieu.lieu }}</td>
                     <td>{{ detailLieu.libelle }}</td>
                     <td>{{ detailLieu.distance }} </td>
-                    <td ><a  class="btn btn-sm btn-outline-dark mybtn" role="button" 
+                    <td ><a  class="btn btn-sm btn-outline-dark" role="button" 
+                        style="color: white;background: green;"
                         [routerLink]="['/horaires',detailLieu.lieu]" >Infos</a></td>
                 </tr>
             </tbody>

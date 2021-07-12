@@ -1,0 +1,76 @@
+<h3 style="background: green;color: white;">Administration - Gestion des lieux !</h3>
+
+
+<h4>Bonjour {{loginInfo["pseudo"]}} ( {{loginInfo["prenom"]}} {{loginInfo["nom"]}} )</h4>
+
+<div>L'administration des lieux n'ayant pas été habillé dans cette application Angular (dans sa version 1) 
+vous trouverez ci dessous la procédure pour créer un nouveau lieu.<br><br>
+
+Pour rappel , la liste des lieux est stocké dans MongoDb, par défault dans la database <b>transport_nantes</b> 
+sous la collection  <b>lieus</b>
+
+<p><br>Il faudra effectuer les actions suivantes : </p>
+
+<ol>
+    <li><u>Appeler le microService Node.js de création de lieu</u><br><br>
+        l'adresse du service est <b> {{ApiPrefix}}:8282/transport-nantes-api/private/role-admin/lieu</b>
+         en appel "post" avec l'objet (format JSON) du lieu à créer<br><br>
+
+         on pourra utiliser 
+         <a target="_blank" href="https://www.postman.com/downloads/">Postman</a> pour effectuer cette requette
+
+         <br><br>
+         L'objet à passer en parametre devra avoir les propriétés suivantes :
+         <ul>
+            <li><b>"lieu"</b> : code du lieu à créer, <br>
+                "TAL" par exemple pour le marcher de Talensac</li>
+            <li><b>"nom"</b> : Libellé du lieu <br>
+                    "Marcher de Talensac" par exemple</li>
+                    <li><b>   "description" </b> Description sur plusiers lignes (avec \n) du lieu<br>
+                        "Ce marché propose des commerces d'alimentation, de l'artisanat, de la mercerie et de la maroquinerie". par exemple
+            <li><b>"latitude"</b> latiude en format numerique us (avec un .) <br>
+                47.22123 par exemple<br>
+                on pourra trouver cette information sur Google Maps</li>
+            <li><b>"longitude"</b>longitude en format numerique us (avec un .)<br>
+                -1.5601547 par exemple<br>
+                on pourra trouver cette information sur Google Maps</li>
+        </ul>
+        <br>
+        Les systeme ira alors appeler un API TAN pour chercher les stations proches de cette adresse GPS
+
+        <br><br>
+        Le Microservice (si dispo) peut envoyer ce type de message d'erreur :
+        <ul>
+            <li><b>lieu 'xx' déjà existant</b> : le lieu existe déns dans la colletion MongoDB</li>
+            <li><b>Aucune station pour cette adresse</b>
+                Aucune station TAN n'a été trouvé proche de l'adresse GPS</li>
+        </ul>
+
+        <br>
+        si ok, en retour on aura l'objet créé avec l'ensemble des lignes TAN associées<br>
+        (et leur distance en metre par rapport à l'adresse GPS)
+        <br><br>
+
+    </li>
+
+    <li><u>Créer une image principale par rappor au lieu créé</u><br><br>
+
+        Le nom du fichier est le code lieu (exmple "TAL") suivi de de .jpg<br>
+        Il devra etre trouvé à l'adresse :
+        <b>{{imgServer}}</b>codelieu<b>.jpg</b>
+
+
+        <br>
+
+</ol>
+<p>
+<br>
+A partir du moment où le lieu est créé il sera prise en compte dans la collecte des horaires.
+<br><br>
+on pourra si besoin supprimer un lieu en supprimant directment l'objet correspondant dans MongoDB 
+en uilisant mongo.exe en mode commande ou le client Windows MongoDB Compass
+</p>
+
+
+
+</div>

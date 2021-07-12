@@ -31,12 +31,11 @@ export class HeaderComponent implements OnInit {
   
   
   private myMenuDefault : MenuDefinition[] = [
-    { label : "Fichier" , 
+    { label : "Menu" , 
       children : [
-        { label : "Login" , path : "/login" } ,
         { label : "Accueil" , path : "/welcome" },
-        { divider : true },
-        { label : "Liste Lieux" , path : "/allplaces" }
+        { label : "Liste Lieux d'interet" , path : "/allplaces" },
+        { label : "Mon Compte" , path : "/login" }
       ]
     },
     ];
@@ -46,12 +45,11 @@ export class HeaderComponent implements OnInit {
 
 
   public myMenuDef : MenuDefinition[] = [
-    { label : "Fichier" , 
+    { label : "Menu" , 
       children : [
-        { label : "Login" , path : "/login" } ,
         { label : "Accueil" , path : "/welcome" },
-        { divider : true },
-        { label : "Liste Lieux" , path : "/allplaces" }
+        { label : "Liste Lieux d'interet" , path : "/allplaces" },
+        { label : "Mon Compte" , path : "/login" }
       ]
     },
     ];
@@ -94,7 +92,8 @@ export class HeaderComponent implements OnInit {
             this.myMenuDef = [];
             this.myMenuDef.push(this.myMenuDefault[0]);
 
-            console.log("on passe par le refresh avec user : " + JSON.stringify(objConnected) + " - " + objConnected["email"]);
+            // console.log("on passe par le refresh avec user : " + JSON.stringify(objConnected) + " - " + objConnected["email"]);
+            let objAdmChoice = {};
             if (objConnected["email"] !== undefined) {
 
               let objAdmuse = {
@@ -103,8 +102,20 @@ export class HeaderComponent implements OnInit {
                   { label : "Deconnexion" , path : "/Deconnexion" } ,
                   { label : "Mes Stations" , path : "/myStations" }]
               }
+            
+              if (objConnected["isAdmin"] === true) {
+
+                objAdmChoice = {
+                  label : "Administration" , 
+                  children : [
+                    { label : "Gestion des lieux" , path : "/AdmLieux" },
+                    { label : "Nettoyage Historique Horaires" , path : "/NetHisto" } 
+                   ]
+                  }
+              }
               console.log("on ajoute ld mennu : " + JSON.stringify(objAdmuse))
               this.myMenuDef.push(objAdmuse);
+              this.myMenuDef.push(objAdmChoice);
             }
              
           

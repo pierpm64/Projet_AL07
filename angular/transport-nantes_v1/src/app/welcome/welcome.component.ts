@@ -6,6 +6,8 @@ import localeFr from '@angular/common/locales/fr';
 import { formatDate } from '@angular/common';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment';
+
 
 
 
@@ -17,11 +19,12 @@ import { Location } from '@angular/common';
 })
 export class WelcomeComponent implements OnInit {
 
-
-  images = [701, 800, 900, 920].map((n) => `https://al07-rect.s3.eu-west-3.amazonaws.com/images/${n}.png`);
-
+  public images : String[] = [];
+  private imgServer : String = environment.imgServer;
+  
   private loginInfoStr : string;
   public loginInfo : object = null;
+  public isAdmin : boolean = false;
   public date : Date = new Date();
 
   public ipAddress : String = "";
@@ -39,9 +42,19 @@ export class WelcomeComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    // init liste des images
+    let ImagesN = [701, 800, 900, 920];
+    for (let num in ImagesN) {
+      let imgUrl = this.imgServer + ImagesN[num].toString() + ".png"
+      this.images.push(imgUrl);
+
+    }
+    //
     this.location.replaceState('/');
+    console.log(JSON.stringify(this.images));
     // Recuperation browser et version :
     this.browser = this.myBrowser();
+    this.ipAddress = window.location.origin;
     // Formatage date et heure en francais
     registerLocaleData(localeFr, 'fr');
     let d = new Date(); 
@@ -52,6 +65,7 @@ export class WelcomeComponent implements OnInit {
       this.loginInfo = JSON.parse(this.loginInfoStr);
       console.log("email : " + this.loginInfo["email"]  + " / isadmin : " 
       + this.loginInfo["isAdmin"])
+      this.isAdmin = this.loginInfo["isAdmin"];
     }
 
   }
@@ -72,12 +86,15 @@ export class WelcomeComponent implements OnInit {
         let tabtra = vartra.split("/");
         return 'Google Chrome version '+ tabtra[1];
     }else if(Agent.indexOf("Safari") != -1){
-        return 'Safari';
+      let pos = Agent.indexOf(" Safari") 
+      let vartra = Agent.substr(pos,20)
+      let tabtra = vartra.split("/");
+      return 'Apple Safari version ' + tabtra[1];;
     }else if(Agent.indexOf("Firefox") != -1 ) {
        let pos = Agent.indexOf(" Firefox") 
         let vartra = Agent.substr(pos,20)
         let tabtra = vartra.split("/");
-         return 'Firefox version ' + tabtra[1];;
+        return 'Firefox version ' + tabtra[1];;
     }else if((Agent.indexOf("MSIE") != -1 ) || (!!document.DOCUMENT_NODE == true )){
       return 'IE'; 
     } else {

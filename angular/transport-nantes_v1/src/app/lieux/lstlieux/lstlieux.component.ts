@@ -4,6 +4,7 @@ import { GetLstLieuxService } from '../../common/service/getlstlieux.service';
 import { lstlieuxresponse } from '../../common/data/lstlieuxresponse ';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Location } from '@angular/common';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'ngbd-modal-options',
@@ -26,6 +27,8 @@ import { Location } from '@angular/common';
 export class LstlieuxComponent implements OnInit {
 
   closeResult: string;
+
+  public imgServer : String = environment.imgServer;
 
   public lstAllLieux : lstlieuxresponse = null;
 
@@ -88,6 +91,12 @@ export class LstlieuxComponent implements OnInit {
 
   openModalDialogCustomClass(content) {
     this.modalService.open(content, { modalDialogClass: 'dark-modal' });
+  }
+
+  openGoogleLink(latitude:number,longitude) {
+    let url = "http://www.google.com/maps/place/"+latitude+","+longitude+"/@/Lieu,17z/data=!3m1!1e3"
+    this.router.navigateByUrl(url);
+
   }
 
 

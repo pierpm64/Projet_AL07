@@ -5,6 +5,8 @@ import { LogoutComponent } from './logout/logout.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 import { LstlieuxComponent} from './lieux/lstlieux/lstlieux.component';
 import { HorairesComponent } from './horaires/horaires.component';
+import { AdmLieuxComponent } from './adm-lieux/adm-lieux.component';
+import { NetHistoComponent } from './net-histo/net-histo.component';
 import { FavoritesLinesComponent } from './favorites-lines/favorites-lines.component';
 
 const routes: Routes = [
@@ -14,7 +16,9 @@ const routes: Routes = [
   { path : 'allplaces', component : LstlieuxComponent},
   { path : 'horaires/:lieu', component : HorairesComponent},
   { path : 'Deconnexion', component : LogoutComponent},
-  {path : "myStations", component : FavoritesLinesComponent}
+  { path : "myStations", component : FavoritesLinesComponent},
+  { path : "AdmLieux", component : AdmLieuxComponent},
+  { path : "NetHisto", component : NetHistoComponent}
 
   // { path: 'basic', component: BasicComponent },
 ];
