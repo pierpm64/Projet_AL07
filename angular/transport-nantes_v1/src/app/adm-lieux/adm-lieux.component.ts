@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Router} from '@angular/router';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -16,11 +17,14 @@ export class AdmLieuxComponent implements OnInit {
   public loginInfo : Object = null;
 
   constructor(
-    private router: Router
+    private router: Router,
+    private location: Location
+    
   ) { }
 
   ngOnInit(): void {
 
+    this.location.replaceState('/');
     // check Connected and Admin
     let loginInfoStr = sessionStorage.getItem('curUser');
     let isDba = false;

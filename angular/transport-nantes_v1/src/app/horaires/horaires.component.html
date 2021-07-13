@@ -21,22 +21,20 @@
             </label>  
             <ng-template #contenu>
                 <span class="col-3 col-md-3 col-xl-4" 
-                style="background: mediumseagreen;color: white;font-size: large;"
+                style="background: mediumseagreen;color: white;font-size: large;text-align: center;"
                 >Station favorite depuis le {{DateFavorite}}</span>
                 <div class="col-1 col-md-1 col-xl-2"></div>
                 <div class="col-2 col-md-1 col-xl-1" >
-                    <button class="btn btn-outline-success btn-sm" 
-                    style="background: midnightblue;color: white;"
-                     (click)="RemoveFavorite()">Supprimer des favoris</button> 
+                    <button class="btn btn-outline-success btn-sm mybtn" 
+                     (click)="RemoveFavorite()">Supprimer favori</button> 
                 </div>
             </ng-template>
             <ng-template #contenu_pas_bon>
                 <div class="col-3 col-md-3 col-xl-4"></div>
                 <div class="col-1 col-md-1 col-xl-2"></div>
                 <div class="col-2 col-md-1 col-xl-1">
-                    <button class="btn btn-outline-success btn-sm" 
-                    style="background: green;color: white"
-                     (click)="AddFavorite()">Ajouter au favoris</button> 
+                    <button class="btn btn-outline-success btn-sm mybtn" 
+                     (click)="AddFavorite()">Ajouter favori</button> 
                 </div>
             </ng-template>
         
@@ -56,8 +54,8 @@
             
             </select>
         </div>
-        <div class="col-1 col-md-1 col-xl-1"></div>
-        <div class="col-12 col-md-3 col-xl-3">
+        <!--<div class="col-1 col-md-1 col-xl-1"></div>-->
+        <div class="col-12 col-md-6 col-xl-4">
 
             <label for="lstDates">Choissez une Date: </label>
 

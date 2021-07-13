@@ -7,12 +7,111 @@
 <div>Dans le cadre du projet de suivi de la qualité du transport à Nantes (TAN)
     Il y a des robots qui vont collecter l'info pour pouvoir la restituer, la comparer
 
-    <p>
-    Il y a fait 3 robots qui tournent :</p>
+    <p><br>
+    Il y a en fait 3 robots qui tournent pour collecter :</p>
 
     <ol>
-        <li><u>Une collecte des horaires du jours</u><br><br>
-        TOus les matins à 5h15, on appelle l'api TAN pour recherche des horaires des lignes 
-        pour l'ensemble des stations nécéssaires (celles </li>
+        <li><u>L'ensemble des stations du réseaux TAN</u><br>
+            Tous les samedis  à 12h30, on appelle l'api TAN pour mettre à jour la liste des station 
+            avec, pour chacune d'elles, les ligne de transport en comun associées<br>
+
+            L'url d'accés à toutes les station est : <b>http://open.tan.fr/ewp/arrets.json</b>
+
+        <br><br>
+        Aprés appel du service TAN, l'information et reformatée et stockée dans MongoDB,
+        database <b>transport_nantes</b> (pas défaut), collection <b>TanAllStations</b><br><br>
+    </li>
+
+        <li><u>Les horaires du jour</u><br>
+        Tous les matins à 5h15, on appelle l'api TAN pour recherche des horaires du jour des lignes 
+        pour l'ensemble des stations nécéssaires (celles qui sont associées au lieux d'interet)<br><br>
+
+        L'url d'accés aux horaires du jour est : 
+        <b>http://open.tan.fr/ewp/horairesarret.json/</b>code_station<b>/</b>ligne<b>/</b>sens<br>
+
+        <br>exemple: <b>http://open.tan.fr/ewp/horairesarret.json/COMM/2/1</b>
+        <br>Recherche des horaires "planifiés" pour
+        <ul>
+            <li>La Station <b>COMM</b> (Commerce)</li>
+            <li>La Ligne <b>2</b> (Tram)</li>
+            <li>Le sens <b>1</b> pour aller (<b>2</b> pour retour)</li>
+        </ul>
+
+        <br>
+        Aprés appel du service TAN, l'information et reformatée et stockée dans MongoDB,
+        database <b>transport_nantes</b> (pas défaut), collection <b>TanPlannedTime</b><br><br>
+
+        
+    </li>
+
+        <li><u>Les temps d'attente en station</u><br>
+            Tous les heures (pile), on appelle l'api TAN pour recherche des temps d'attente "reel" en station
+            <br><br>
+            L'url d'accés aux horaires du jour est : 
+             <b>http://open.tan.fr/ewp/tempsattente.json/</b>code_station
+
+             <br><br>
+             exemple : <b>http://open.tan.fr/ewp/tempsattente.json/COMM</b><br>
+             Pour obtenir l'ensemble des temps d'attente (dans l'heure qui suit l'appel) pour la station COMM
+
+             <br><br>
+        Aprés appel du service TAN, l'information et reformatée et stockée dans MongoDB,
+        database <b>transport_nantes</b> (pas défaut), collection <b>TanRealTime</b><br><br>
+
+        
+        </li>
+        
     </ol>
+
+    Si on ne fait aucun de traitement de "nettoyage", les collections MongoDB contenant les horaires 
+    planifiés et reels vont se remplir (assze vite)<br><br>
+
+    Il n'y a actuallement pas de traitement automatique d'archive des "vieilles" données<br><br>
+
+    C'est pour ces raisons qu'il est conseillée, chaque début de mois, de nettoyer ce qui est associée au 
+    mois -2 
+    <br>(en début Juin on nettoye les données d'Avril, en début Aout on nettoye  les données de  Juin,etc. )
+
+    <br><br>
+    <p>La procédure qui est préconisée est la suivante :<br></p>
+    <ol>
+        <li>
+            <u>Sauvegade des données</u> en utilisant soit<br><br>
+            <ul>
+                <li>
+                    Le client windows 
+                    <a href="https://www.mongodb.com/try/download/compass" target="_blank">
+                    MongoDB Compass</a> <br>
+                    le menu Collection/Export Collection<br>
+                </li>
+                <br>
+                <li>l'appel à un des services fournie dans la solution :<br>
+                    <ul>
+                        <li>Horaires planifiés, collection TanPlannedTime : 
+                            <b>{{ApiPrefix}}:8282/transport-nantes-api/public/plannedtime</b></li>
+                    </ul>
+                    <ul>
+                        <li>Horaires reels , collection TanRealTime : 
+                            <b>{{ApiPrefix}}:8282/transport-nantes-api/public/realtime</b></li>
+                    </ul>
+
+                </li><br>
+                Pour appeler ces services sous windows et recuperer les résultas on pourra utiliser 
+                <a href="http://gnuwin32.sourceforge.net/packages/wget.htm" target="_blank">WGET</a>
+                
+            </ul>
+            <br>
+        </li>
+
+        <li><u>Supprimer les vieilles données</u></li>
+        en utilisant le client batch mongo.exe <br>
+        la commande 
+        <a href="https://docs.mongodb.com/manual/reference/method/db.collection.remove/" target="_blank">
+        db.collection.remove()</a><br>
+
+        dans la requette (query) passée en parametre, on utilisera la propriété "date", 
+        en format "yyyy-mm-dd" (exemple : "2021-07-12")
+
+
+    </ol><br>
 </div>

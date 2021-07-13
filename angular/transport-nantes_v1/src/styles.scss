@@ -12,3 +12,17 @@ input.ng-invalid {
 
 /* Importing Bootstrap SCSS file. */
 @import '~bootstrap/scss/bootstrap';
+
+.mybtn {
+  color: white;
+  font-weight: 500;
+  border-color: white;border-width: 2px;
+  background-color : green;
+}
+
+.mybtn:hover{
+  background-color : white;
+  color: darkgreen;
+  font-weight: 750;
+}
+
