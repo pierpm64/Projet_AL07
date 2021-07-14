@@ -34,6 +34,7 @@ public class UtilisateurControler {
 
 	Logger log = LoggerFactory.getLogger(this.getClass());
 
+	@CrossOrigin
 	@PostMapping(path = "/creerUtilisateur")
 	public ResponseEntity<Utilisateur> creerUtilisateur(@RequestBody Utilisateur utilisateur) {
 		log.info("utilisateur à créer dans UtlisateurControler : " + utilisateur);

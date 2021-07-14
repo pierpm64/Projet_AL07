@@ -1,0 +1,92 @@
+<div  class="container">
+    <div class="row">
+      <div class="col-2 col-md-3 col-xl-4"></div>
+      <div class="col-8 col-md-6 col-xl-4 connect">
+   <div class="card" style="background-color: rgb(209, 216, 212);">
+      <div class="card-header" style="background-color: green;color: white;font-weight: bold;">
+        Création Compte {{typUser}}</div>
+  
+        
+  
+          <form #formLogin="ngForm">
+            <ul class="list-group list-group-flush">
+  
+                <li class="list-group-item">
+   
+      <div>   <label><b>Email : </b></label>
+              <input [(ngModel)]="logincre.email" type="email"  ngModel email="true" ngModel required
+              ngModel minlength="5" #name="ngModel" id="email" name="email"
+                placeholder="user@domain.com" /> 
+
+  
+                 
+      </div>
+      <div>
+           
+  
+            <label><b>Mot de Passe :</b> </label>
+              <input [(ngModel)]="logincre.password" type="password" ngModel minlength="3"  ngModel required
+              placeholder="Mot de passe (sur 3 positions min)" id="password" name="password" #pwd="ngModel"> 
+  
+
+      </div>
+
+      <div>
+           
+  
+        <label><b>Confirmation Mot de Passe :</b> </label>
+          <input [(ngModel)]="passwordcnf" type="password" ngModel minlength="3"  ngModel required
+          placeholder="Confirmation Mot de passe" id="passwordcnf" name="passwordcnf" #pwdcnf="ngModel"> 
+
+
+  </div>
+    </li> 
+    <li class="list-group-item"><div>
+        <label><b>Prenom : </b></label>
+    <input [(ngModel)]="logincre.prenom" type="text"  ngModel required
+    ngModel minlength="3" #prenom="ngModel" id="prenom" name="prenom"
+      placeholder="votre prénom" /> </div>
+       
+      <div>
+        <label><b>Nom : </b></label>
+      <input [(ngModel)]="logincre.nom" type="text"  ngModel required
+    ngModel minlength="3" #nom="ngModel" id="nom" name="nom"
+      placeholder="votre nom" /> 
+
+    </div>
+    <div>
+        <label><b>Pseudo : </b></label>
+      <input [(ngModel)]="logincre.pseudo" type="text"  ngModel required
+      ngModel minlength="3" #pseudo="ngModel" id="pseudo" name="pseudo"
+        placeholder="votre pseudo" /> 
+    </div>
+</li>
+
+     
+
+
+<li class="list-group-item">
+  
+      <p style="text-align: center;margin-bottom: 0%;">
+      <button class="mybtn"    [disabled]="!formLogin.form.valid"  (click)="onCreate()" > 
+            Création
+          </button>
+        </p>
+
+
+        </li>
+        <li class="list-group-item"  style="background-color: green;color: white;">
+        <span>
+       
+      {{message}}
+        </span>
+      </li>
+    </ul>
+</form>
+      </div>
+  
+    </div>
+    <div class="col-2 col-md-3 col-xl-4"></div>
+  </div>
+  </div>
+  

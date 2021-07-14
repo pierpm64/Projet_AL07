@@ -8,6 +8,7 @@ import { HorairesComponent } from './horaires/horaires.component';
 import { AdmLieuxComponent } from './adm-lieux/adm-lieux.component';
 import { NetHistoComponent } from './net-histo/net-histo.component';
 import { FavoritesLinesComponent } from './favorites-lines/favorites-lines.component';
+import { CreateuserComponent } from './createuser/createuser.component';
 
 const routes: Routes = [
   { path: 'welcome', component: WelcomeComponent },
@@ -18,7 +19,8 @@ const routes: Routes = [
   { path : 'Deconnexion', component : LogoutComponent},
   { path : "myStations", component : FavoritesLinesComponent},
   { path : "AdmLieux", component : AdmLieuxComponent},
-  { path : "NetHisto", component : NetHistoComponent}
+  { path : "NetHisto", component : NetHistoComponent},
+  { path : "CreateUser", component : CreateuserComponent}
 
   // { path: 'basic', component: BasicComponent },
 ];

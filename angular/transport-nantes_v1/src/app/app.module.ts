@@ -20,6 +20,7 @@ import { FavoritesLinesComponent } from './favorites-lines/favorites-lines.compo
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdmLieuxComponent } from './adm-lieux/adm-lieux.component';
 import { NetHistoComponent } from './net-histo/net-histo.component';
+import { CreateuserComponent } from './createuser/createuser.component';
 
 
 
@@ -36,6 +37,7 @@ import { NetHistoComponent } from './net-histo/net-histo.component';
     FavoritesLinesComponent,
     AdmLieuxComponent,
     NetHistoComponent,
+    CreateuserComponent,
   ],
   imports: [
     BrowserModule,

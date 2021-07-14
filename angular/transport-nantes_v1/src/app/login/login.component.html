@@ -19,7 +19,6 @@
             ngModel minlength="5" #name="ngModel" id="email" name="email"
               placeholder="user@domain.com" /> 
 
-              <span *ngIf="name.errors?.email">ca n'est pas un email</span>
 
                
     </div>
@@ -28,15 +27,18 @@
 
           <label><b>Mot de Passe :</b> </label>
             <input [(ngModel)]="login.password" type="password" ngModel minlength="3"  ngModel required
-            placeholder="Mot de passe" id="password" name="password" #pwd="ngModel"> 
+            placeholder="Mot de passe (sur 3 positions min)" id="password" name="password" #pwd="ngModel"> 
 
-          <span style="size: 20px;" *ngIf="pwd.errors?.minlength">longueur >= 3</span>
     </div>
 
 
     <p style="text-align: center;margin-bottom: 0%;">
     <button class="mybtn"    [disabled]="!formLogin.form.valid"  (click)="onLogin()" > 
           connexion 
+        </button>
+        <span style="padding-left:20px">  </span>
+        <button class="mybtn" (click)="createUser()" > 
+          creer compte 
         </button>
       </p>
     </form>

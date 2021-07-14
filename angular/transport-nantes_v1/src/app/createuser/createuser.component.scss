@@ -13,6 +13,14 @@ input[type=email] {
     box-sizing: border-box;
   }
 
+  input[type=text] {
+    width: 100%;
+    padding: 0px;
+    
+    margin-bottom: 5px;
+    box-sizing: border-box;
+  }
+
   fieldset {
     border:2px solid green;	
     font-size:small;
@@ -65,9 +73,6 @@ input[type=email] {
   }
 
 .connect {
-    /*padding-top:15%;
-    padding-bottom: 15%; */
-    padding-top:30vh ;
-    padding-bottom:30vh ;
-    /* padding: 40vh; */ 
+    padding-top:16vh ;
+    padding-bottom:16vh ; 
 }

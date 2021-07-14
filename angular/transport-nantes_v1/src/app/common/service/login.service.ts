@@ -7,6 +7,7 @@ import { map } from 'rxjs/operators';
 import { LoginResponse } from '../data/loginpesponse';
 import { environment } from 'src/environments/environment';
 import { connectedUserService } from './connected-user.service';
+import { LoginCre } from '../data/loginCre';
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +48,18 @@ export class LoginService {
                    )
             );
   }
+
+  public CreatUser$(objUser:LoginCre): Observable<LoginResponse>{
+    let url = this._apiBaseUrl +"/utilisateur/creerUtilisateur" 
+
+    return this._http.post<LoginResponse>(url,objUser, {headers: this._headers} )
+            .pipe(
+                tap((loginResponse)=>{ 
+                        this.sauvegarderUser(loginResponse);}
+                   )
+            );
+   
+ }
 
   private sauvegarderUser(loginResponse:LoginResponse){
        if(loginResponse.email){

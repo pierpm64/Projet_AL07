@@ -109,7 +109,8 @@ export class HeaderComponent implements OnInit {
                   label : "Administration" , 
                   children : [
                     { label : "Gestion des lieux" , path : "/AdmLieux" },
-                    { label : "Nettoyage Historique Horaires" , path : "/NetHisto" } 
+                    { label : "Nettoyage Historique Horaires" , path : "/NetHisto" },
+                    { label : "Création compte Admin" , path : "/CreateUser" } 
                    ]
                   }
               }

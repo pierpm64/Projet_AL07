@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
 
   public login : Login = new Login();
   public message :string ;
-  private userLocal : String;
+  private userLocal : string;
  
 
   constructor(
@@ -24,12 +24,6 @@ export class LoginComponent implements OnInit {
     private _loginService :LoginService,
     private location: Location ,
     private _connectUserService : connectedUserService) {
-      this._connectUserService.getConnectedUserObservable
-      .subscribe(
-        //callback éventuellement re-déclenchée plusieurs fois :
-        (EmailConnecte)=>{
-            this.userLocal=EmailConnecte;}
-      );
      }
 
   public onLogin(){
@@ -38,27 +32,32 @@ export class LoginComponent implements OnInit {
          .subscribe({
            next : (response :LoginResponse) => { 
                   this.traiterReponseLogin(response);
-                  this.message = "bienvenue " + response.pseudo + " (" + response.prenom + " " + response.nom + ")" 
                   this.router.navigate(['/welcome']);
            },
            error : (err) => { console.log("error:"+JSON.stringify(err));
                
-                    sessionStorage.removeItem('curUser');
-                    this._connectUserService.SetConnectedUser = null;
-                    if (err.error.message) {
-                      this.message = err.error.message    
+                    
+                    if (err["error"] == undefined) {
+                      this.message="pas de compte pour cet email et mot de passe !"
                     } else {
                       this.message="une erreur technique a eu lieu."}
                     }
            });
   }
 
+  public createUser(){
+    this.router.navigate(['/CreateUser']);
+  }
+
   private traiterReponseLogin(loginResponse :LoginResponse){
     this.message = loginResponse.message;//améliorable !!!
-    console.log("loginResponse="+JSON.stringify(loginResponse));
+    // console.log("loginResponse="+JSON.stringify(loginResponse));
   }
 
   ngOnInit(): void {
     this.location.replaceState('/');
+    this.login.username = this.userLocal;
+    sessionStorage.removeItem('curUser');
+    this._connectUserService.SetConnectedUser = null;
   }
 }
