@@ -1,0 +1,71 @@
+input[type=email] {
+    width: 100%;
+    padding: 0px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+  }
+
+  input[type=password] {
+    width: 100%;
+    padding: 0px;
+    
+    margin-bottom: 5px;
+    box-sizing: border-box;
+  }
+
+  fieldset {
+    border:2px solid green;	
+    font-size:small;
+    padding:10px;
+    width:fit-content;
+    line-height:1.8;
+    margin: auto;
+    background-color: white;
+
+  }
+
+  legend { 
+    display: block;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: 3px solid navy;
+    background-color:green;
+    color:white;
+    font-weight: bold;
+    font-size:medium;
+}
+
+.mybtn {
+    color: white;
+    border-color: white;border-width: 2px;
+    background-color : green;
+    font-weight: normal;
+    font-size:medium;
+  }
+  .mybtn:disabled{
+    background-color :lightgrey;
+    color:rgb(100, 139, 100);
+    border-color: green;
+  }
+
+  
+.mybtn:hover:enabled{
+    background-color : white;
+    color: darkgreen;
+    font-weight: bold;
+    border-color: green;
+  }
+
+  .mybtn:hover:disabled{
+    background-color : lightgrey;
+    color:green;
+    border-color: green;
+  }
+
+.connect {
+    /*padding-top:15%;
+    padding-bottom: 15%; */
+    padding-top:30vh ;
+    padding-bottom:30vh ;
+    /* padding: 40vh; */ 
+}

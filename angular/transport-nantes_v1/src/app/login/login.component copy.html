@@ -1,0 +1,44 @@
+
+
+<div  style="padding-top:15%;padding-bottom: 15%;">
+ <fieldset style="background-size: 30%;background-position-x: 35%;background-position-y: 35%;
+ background-color: rgb(209, 216, 212);">
+    <legend style="box-sizing: border-box;">connexion à votre compte</legend>
+ 
+    <div>   <label><b>EMail : </b></label>
+            <input [(ngModel)]="login.username" type="email"  ngModel email="true" ngModel required
+            ngModel minlength="5" #name="ngModel" id="email" name="email"
+              placeholder="user@domain.com" /> 
+
+              <span *ngIf="name.errors?.required">L'email est obligatoire</span>
+              <span *ngIf="name.errors?.email">ca n'est pas un email</span>
+
+               
+    </div>
+    <div>
+         
+
+          <label><b>Mot de Passe :</b> </label>
+            <input [(ngModel)]="login.password" type="password" ngModel minlength="5"
+            placeholder="Mot de passe" id="password" name="password" #pwd="ngModel"> 
+
+          <span style="size: 20px;" *ngIf="pwd.errors?.minlength">longueur >= 5</span>
+    </div>
+
+
+    <p style="text-align: center;margin-bottom: 0%;">
+    <button class="mybtn"  (click)="onLogin()" > 
+          connexion 
+        </button>
+      </p>
+      <div>
+      <span style="background-color: green;font-weight: bold;color: white;">
+     
+    {{message}}
+      </span>
+    </div>
+  </fieldset>
+</div>
+
+ 
+

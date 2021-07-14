@@ -6,19 +6,16 @@
     <div class="col-8 col-md-6 col-xl-4 connect">
  <div class="card" style="background-color: rgb(209, 216, 212);">
     <div class="card-header" style="background-color: green;color: white;font-weight: bold;">
-      Connexion à mon compte</div>
+      connexion</div>
 
-      <ul class="list-group list-group-flush">
-
-      <li class="list-group-item">
-
-        <form #formLogin="ngForm">
+      <div class="card-body">
  
-    <div>   <label><b>Email : </b></label>
+    <div>   <label><b>EMail : </b></label>
             <input [(ngModel)]="login.username" type="email"  ngModel email="true" ngModel required
             ngModel minlength="5" #name="ngModel" id="email" name="email"
               placeholder="user@domain.com" /> 
 
+              <span *ngIf="name.errors?.required">L'email est obligatoire</span>
               <span *ngIf="name.errors?.email">ca n'est pas un email</span>
 
                
@@ -27,27 +24,24 @@
          
 
           <label><b>Mot de Passe :</b> </label>
-            <input [(ngModel)]="login.password" type="password" ngModel minlength="3"  ngModel required
+            <input [(ngModel)]="login.password" type="password" ngModel minlength="5"
             placeholder="Mot de passe" id="password" name="password" #pwd="ngModel"> 
 
-          <span style="size: 20px;" *ngIf="pwd.errors?.minlength">longueur >= 3</span>
+          <span style="size: 20px;" *ngIf="pwd.errors?.minlength">longueur >= 5</span>
     </div>
 
 
     <p style="text-align: center;margin-bottom: 0%;">
-    <button class="mybtn"    [disabled]="!formLogin.form.valid"  (click)="onLogin()" > 
+    <button class="mybtn"  (click)="onLogin()" > 
           connexion 
         </button>
       </p>
-    </form>
-      </li>
-      <li class="list-group-item"  style="background-color: green;color: white;">
-      <span>
+      <div>
+      <span style="background-color: green;font-weight: bold;color: white;">
      
     {{message}}
       </span>
-    </li>
-  </ul>
+    </div>
     </div>
 
   </div>
