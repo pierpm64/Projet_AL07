@@ -59,9 +59,11 @@ input[type=email] {
   }
 
   .mybtn:hover:disabled{
-    background-color : lightgrey;
-    color:green;
+    background-color :lightgrey;
+    color:rgb(100, 139, 100);
     border-color: green;
+    border-width: 2px;
+    font-size:medium;
   }
 
 .connect {

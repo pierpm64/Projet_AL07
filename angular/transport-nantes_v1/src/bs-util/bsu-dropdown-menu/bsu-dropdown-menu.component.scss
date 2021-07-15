@@ -19,14 +19,14 @@ et (mouseleave)="dropdown.hide()"
 
 
 a.nav-link  , div.dropdown-menu{
-  color:  myColor(txt-inv-primary) !important;
+  color: white !important;
   background-color: myColor(bg-primary) !important;
 }
 
 
 a.nav-link:hover {
-  color:  myColor(txt-inv-hl-primary) !important;
-  background-color: myColor(bg-primary) !important;
+  color:  white !important;
+  background-color: midnightblue !important;
 }
 
 

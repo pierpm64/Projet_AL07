@@ -4,19 +4,19 @@
 
 
  a.nav-link , a.dropdown-item {
-    color:  myColor(txt-inv-primary) !important;
+    color:  white !important;
     background-color: myColor(bg-primary) !important;
   }
 
   a.nav-link.active , a.dropdown-item.active {
-    color:  myColor(txt-inv-primary) !important;
-    background-color: myColor(bg-hl-primary) !important;
+    color: white !important;
+    background-color: #7EC596!important;
   }
   
   
    a.nav-link:hover , a.dropdown-item:hover{
-    color:  myColor(txt-inv-hl-primary) !important;
-    background-color: myColor(bg-primary) !important;
+    color:  white !important;
+    background-color: midnightblue !important;
   }
   .dropdown-item {
     margin-top: 0;

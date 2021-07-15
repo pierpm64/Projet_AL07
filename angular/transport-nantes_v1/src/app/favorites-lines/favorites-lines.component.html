@@ -1,7 +1,7 @@
 <h3>Mes Stations Favorites !</h3>
 
-<span style="font-size: x-large;"  *ngIf="userConnected"> Bienvenue
-    {{userConnected.pseudo}} ( {{userConnected.prenom}} {{userConnected.nom}} )</span>
+<h5 *ngIf="userConnected"> Bienvenue
+    {{userConnected.pseudo}} ( {{userConnected.prenom}} {{userConnected.nom}} )</h5>
 
 
 <div  *ngIf="LstFavoris">
@@ -22,7 +22,7 @@
             <td>{{ detailFav.libelle }}</td>
             <td>{{ detailFav.lignes }} </td>
             <td>{{ detailFav.datheure }} </td>
-            <td> <a class="btn btn-sm" role="button" style="background-color: darkgreen;color: white;"
+            <td> <a class="btn btn-sm mybtn" role="button"
             [routerLink]="['/horaires',detailFav.station + '_fav']" >horaires
         </a></td>
         </tr>

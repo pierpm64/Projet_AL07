@@ -26,14 +26,14 @@ $default-theme : "blue-theme";
 
 $colors-by-theme:( 
   blue-theme :(
-      txt-primary:   #150f46,
-      bg-primary:    #04245a,
-      bg-hl-primary:    #e7e9ebb6,
-      txt-inv-primary:  #e5e4eb,
-      txt-inv-hl-primary:  #b0b7ce,
+      txt-primary: white,
+      bg-primary:    forestgreen,
+      bg-hl-primary:    green,
+      txt-inv-primary:  #D0DBF0,
+      txt-inv-hl-primary:  #A1D19D,
 
       txt-secondary: #031c46,
-      bg-secondary:  #3745c5,
+      bg-secondary:  #C4D1DD,
       bg-hl-secondary: #832f86,
       txt-inv-secondary:  #ffffff,
       txt-inv-hl-secondary:  #f7f314,

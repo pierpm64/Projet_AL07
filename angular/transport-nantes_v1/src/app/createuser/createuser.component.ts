@@ -17,7 +17,7 @@ export class CreateuserComponent implements OnInit {
   public logincre : LoginCre = new LoginCre();
   public passwordcnf : String = "";
   public message :string ;
-  public typUser :string  = "Utilisateur";
+  public typUser :string  = "mon Compte Utilisateur";
   private userLocal : string;
 
   public signedUser : Object;
@@ -65,7 +65,7 @@ export class CreateuserComponent implements OnInit {
     if (this.signedUser !== null)  {
       if (this.signedUser["isAdmin"] == true) {
         this.logincre.isAdmin = true;
-        this.typUser = "Administrateur";
+        this.typUser = "Compte Administrateur (par " + this.signedUser["pseudo"] +")";
       }
     }
   }
