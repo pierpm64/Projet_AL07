@@ -1,6 +1,8 @@
     <a *ngIf="menuDef.path && subLevel" [ngClass]="setCssClasses()"
        [routerLink]="[menuDef.path]"
-       [routerLinkActive]="'active'" (click)="toggleNavBar()">{{menuDef.label}}
+       [routerLinkActive]="'active'" (click)="toggleNavBar()"
+       style="  font-family: Verdana, Geneva, Tahoma, sans-serif;;
+       font-size: large; ">{{menuDef.label}}
     </a>
 <!-- ou bien -->
 <li *ngIf="menuDef.path && !subLevel"  class="nav-item">

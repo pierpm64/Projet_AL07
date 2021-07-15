@@ -1,7 +1,8 @@
 
 <li dropdown class="nav-item dropdown" #dropdown="bs-dropdown" >
   <a class="nav-link dropdown-toggle titre1" id="myDropdown" 
-  (mouseenter)="dropdown.show()"  (mouseleave)="dropdown.hide()"
+  (mouseenter)="dropdown.show()"  (mouseleave)="dropdown.hide()" 
+  style="font-family: Verdana, Geneva, Tahoma, sans-serif;font-size: large;"
   dropdownToggle >{{label}}</a>
   <div *dropdownMenu class="dropdown-menu" aria-labelledby="myDropdown">
     <bsu-nav-item *ngFor="let mDef of dopdownMenuDefs" 
