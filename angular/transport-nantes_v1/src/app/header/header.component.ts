@@ -108,9 +108,10 @@ export class HeaderComponent implements OnInit {
                 objAdmChoice = {
                   label : "Administration" , 
                   children : [
-                    { label : "Gestion des lieux" , path : "/AdmLieux" },
-                    { label : "Nettoyage Historique Horaires" , path : "/NetHisto" },
-                    { label : "Création compte Admin" , path : "/CreateUser" } 
+                    { label : "Création Compte Admin" , path : "/CreateUser" } ,
+                    { label : "Gestion des Lieux" , path : "/AdmLieux" },
+                    { label : "Nettoyage Historique Horaires" , path : "/NetHisto" }
+                   
                    ]
                   }
               }

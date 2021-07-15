@@ -1,1 +1,13 @@
-.piedPage { background-color: lightgrey;}
+.mybtn {
+    color: white;
+    font-weight: 500;
+    border-color: white;border-width: 2px;
+    background-color : green;
+  }
+  
+  .mybtn:hover{
+    background-color : white;
+    color: darkgreen;
+    font-weight: 750;
+    border-color: green;border-width: 2px;
+  }

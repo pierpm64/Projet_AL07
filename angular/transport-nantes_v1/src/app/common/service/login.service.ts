@@ -44,7 +44,7 @@ export class LoginService {
             .pipe(
                 tap((loginResponse)=>{ 
                         this._connecteduserService.SetConnectedUser = null;
-                        this.sauvegarderUser(loginResponse);}
+                        this.sauvegarderUser(loginResponse,"store");}
                    )
             );
   }
@@ -55,17 +55,25 @@ export class LoginService {
     return this._http.post<LoginResponse>(url,objUser, {headers: this._headers} )
             .pipe(
                 tap((loginResponse)=>{ 
-                        this.sauvegarderUser(loginResponse);}
-                   )
+                      if (loginResponse.isAdmin) {
+                        this.sauvegarderUser(loginResponse,"nostore");
+                      }
+                      else 
+                      { 
+                        this.sauvegarderUser(loginResponse,"store");
+                      }
+                    })
             );
    
  }
 
-  private sauvegarderUser(loginResponse:LoginResponse){
+  private sauvegarderUser(loginResponse:LoginResponse,param:string){
        if(loginResponse.email){
-         sessionStorage.setItem('curUser',JSON.stringify(loginResponse));
-         this._connecteduserService.SetConnectedUser=
+         if (param == "store") {
+            sessionStorage.setItem('curUser',JSON.stringify(loginResponse));
+            this._connecteduserService.SetConnectedUser=
                     loginResponse.email;
+         }
          //ou autre façon de mémoriser le jeton
        }
        else{

@@ -177,7 +177,7 @@ function getTanRealTime(station="null") {
 			
 			// Recuperation date execution, arrondie (à la minutes superieure)
 			let datCurR = new Date();
-			let datCur = addSeconds(datCurR,30)
+			// let datCur = addSeconds(datCurR,30)
 			let datcurmm = datCur.getMonth() + 1;
 			let timcurhh = datCur.getHours().toString().padStart(2,"0")
 			// formatage date heure courante
@@ -196,7 +196,7 @@ function getTanRealTime(station="null") {
 				// Calcul heure de passage par rapport à heure courante + délai
 				let tempTrajet = trajet.temps;
 				if (tempTrajet == "Proche") {
-					tempTrajet = 0;
+					tempTrajet = 1;
 				} else {
 					tempTrajet = tempTrajet.split(' ')[0]
 					if (isNaN(tempTrajet)) {
