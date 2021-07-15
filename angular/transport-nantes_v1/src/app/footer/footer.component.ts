@@ -15,6 +15,7 @@ export class FooterComponent implements OnInit {
 
   public envBld : string = environment.libEnv;
   public dateHeureBld : string = environment.timeStamp;
+  public imgServeur : string = environment.imgServer;
 
   public browser : String = "Non Reconnu";
 
