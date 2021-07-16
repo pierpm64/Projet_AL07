@@ -113,10 +113,13 @@ function getPlannedTime(curDate) {
 
 // function de recherche des horaires planifiés pour tous les lieux, stations et lignes associées
 function getRealTime(curDate,curHeure) { 
+    console.log("==> appel getRealTime ( date:" + curDate + ", heure:" + 
+    curHeure + " ) le " + api_tan.getCurDateTime())
     api_mongoDB.genericFindList("lieus",{},
     function (err, lieus) 
     {
         let lstStation = {};
+        // console.log("==> getRealTime /  liste des lieus à analyser : " + JSON.stringify(lieus));
         for (lieu of lieus) {
                 for (station of lieu.lstStations) {
                 if (lstStation[station.lieu] === undefined) {
@@ -128,10 +131,12 @@ function getRealTime(curDate,curHeure) {
             }
         }
 
+        console.log("==> getRealTime /  liste des station à analyser " + JSON.stringify(lstStation));
         for (let station in lstStation) {
             // console.log("station :" + station);
                
             // Appel api pour avoir les horaires reels
+            // console.log("appel api_tan.getTanRealTime("+ station + ") le " + api_tan.getCurDateTime())
             AppelApi(api_tan.GenericAsync(api_tan.getTanRealTime(station)),
                     function(par) 
                     {
@@ -195,31 +200,6 @@ async function getallStations() {
 }
 
 
-// function get and update all stations
-async function getallStations2() {
-    // delete MongoDB collection tanAllStations
-    await api_mongoDB_v1.MongoDeleteCollection("TanAllStations");
-    // appel api get station et exploitation resultats
-    lstStations  = await api_tan.getAllTanStations();
-    // Insertion resultat dans MongoDB
-    for (let station of lstStations) {
-        station._id = station.lieu;
-        station.timestamp = api_tan.getCurDateTime();
-        api_mongoDB.genericInsertOne('TanAllStations',
-        station,
-        function (err, eId) {
-            if (err == null && eId != null)
-                console.log("horaire créé in MongoDB - getallStations2 - " +
-                     "lieu : " + station.lieu + " - lignes : " + station.lignes +
-                     " - at : " + api_tan.getCurDateTime());
-            else
-                console.log("erreur insert in MongoDB - getallStations2 " +
-                 "- erreur :" + err)
-            });
-    }
-}
-
-
 // le robot peut etre appelé de trois facons :
 // 1 - init - creation tanAllStation
 // 2 - day (default) - Récupeation horaires jours et stockage dans TanPlannedTime
@@ -275,9 +255,3 @@ async function mainTask(parm="day")  {
 }
 
 exports.mainTask = mainTask;
-
-/*
-// force stop process after timeOut
-setTimeout((function() {
-    return process.kill(process.pid);
-}), 50000);  */

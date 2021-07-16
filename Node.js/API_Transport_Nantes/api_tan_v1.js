@@ -178,6 +178,7 @@ function getTanRealTime(station="null") {
 			// Recuperation date execution, arrondie (à la minutes superieure)
 			let datCurR = new Date();
 			// let datCur = addSeconds(datCurR,30)
+			let datCur = addSeconds(datCurR,0)
 			let datcurmm = datCur.getMonth() + 1;
 			let timcurhh = datCur.getHours().toString().padStart(2,"0")
 			// formatage date heure courante
