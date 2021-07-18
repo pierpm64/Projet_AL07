@@ -15,7 +15,6 @@ let serveurip = address.ip();
 console.log('===> plateforme : ' + process.platform + " / pid : " + process.ppid)
 console.log('===> ip v4 : ' + serveurip + " / ip v6  : " + address.ipv6())
 
-
 function getIdName(ip) {
 	let ipTab = String(ip).split(':');
 	let ipwork = ipTab[ipTab.length-1];
