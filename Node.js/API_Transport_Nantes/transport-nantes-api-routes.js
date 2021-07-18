@@ -2,10 +2,28 @@
 // Projet fin de cycle AL07 - Juillet 2021
 // by PierPM
 var express = require('express');
+const requestIp = require('request-ip');
 const api_tan  = require('./api_tan_v1');
 const apiRouter = express.Router();
-
+var dns = require('dns');
+const process = require('process');
+const address = require('address');
 var myGenericMongoClient = require('./my_generic_mongo_client');
+
+
+console.log('===> plateforme : ' + process.platform + " / pid : " + process.ppid)
+console.log('===> ip v4 : ' + address.ip() + " / ip v6  : " + address.ipv6())
+
+
+function getIdName(ip) {
+	require('dns').reverse(ip, function(err, domains) {
+    if(err) {
+        return err.toString();
+    }
+    return domains;
+})};
+
+
 
 // Async function to call TAN API
 async function AppelApi(parfunc=api_tan.GenericAsync(api_tan.getTanStations(47.2133057,-1.5604042)),
@@ -123,7 +141,18 @@ apiRouter.route('/transport-nantes-api/public/lieu/:code')
 //exemple URL: http://localhost:8282/transport-nantes-api/public/lstLieus (retoune tous les lieux )
 apiRouter.route('/transport-nantes-api/public/lstLieus')
 	.get(function (req, res, next) {
-		console.log("GET,All lieus:");
+			// by default, the ip address will be set on the `clientIp` attribute
+
+		let clientIp = requestIp.getClientIp(req); 
+		
+		/*let objtmp = req;
+		for (let param in objtmp) {
+			console.log("param : " + param);
+		} */
+
+		
+		console.log("GET,All lieus - by " +  clientIp + ' / ' + getIdName(clientIp) +
+		" - le " + api_tan.getCurDateTime());
 		myGenericMongoClient.genericFindList('lieus', {},function (err, lieus) {
 			res.send(lieus);
 		});//end of genericFindList()
