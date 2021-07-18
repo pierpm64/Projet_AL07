@@ -19,7 +19,6 @@ console.log('===> ip v4 : ' + serveurip + " / ip v6  : " + address.ipv6())
 function getIdName(ip) {
 	let ipTab = String(ip).split(':');
 	let ipwork = ipTab[ipTab.length-1];
-	console.log("ip traitée :" + ipwork)
 	let ipwork2 = ipwork.split('.');
 	if (ipwork2.length < 4) {
 		return
@@ -30,7 +29,7 @@ function getIdName(ip) {
 		// console.log("errerur reverse" + err)
         console.log("err:" + err);
     }
-    console.log("domaine : " + domains + "( ip :" + ipwork + ")");
+    console.log("domaine : " + domains + " ( ip :" + ipwork + ")");
 })};
 
 
@@ -154,11 +153,6 @@ apiRouter.route('/transport-nantes-api/public/lstLieus')
 
 		let clientIp = requestIp.getClientIp(req); 
 		
-		/*let objtmp = req;
-		for (let param in objtmp) {
-			console.log("param : " + param);
-		} */
-
 		
 		console.log("GET,All lieus - by " +  clientIp +
 		" - le " + api_tan.getCurDateTime());
