@@ -5,30 +5,33 @@ var express = require('express');
 const requestIp = require('request-ip');
 const api_tan  = require('./api_tan_v1');
 const apiRouter = express.Router();
-var dns = require('dns');
+const dns = require('dns');
 const process = require('process');
 const address = require('address');
 var myGenericMongoClient = require('./my_generic_mongo_client');
+const { differenceInSeconds } = require('date-fns/fp');
 
-
+let serveurip = address.ip();
 console.log('===> plateforme : ' + process.platform + " / pid : " + process.ppid)
-console.log('===> ip v4 : ' + address.ip() + " / ip v6  : " + address.ipv6())
+console.log('===> ip v4 : ' + serveurip + " / ip v6  : " + address.ipv6())
 
 
 function getIdName(ip) {
 	let ipTab = String(ip).split(':');
 	let ipwork = ipTab[ipTab.length-1];
+	console.log("ip traitée :" + ipwork)
 	let ipwork2 = ipwork.split('.');
 	if (ipwork2.length < 4) {
-		return "inconnu";
+		return
 	}
-	require('dns').reverse(ipwork, function(err, domains) {
+	
+	dns.reverse(ipwork, function(err, domains) {
     if(err) {
-        return err.toString();
+		// console.log("errerur reverse" + err)
+        console.log("err:" + err);
     }
-    return domains;
+    console.log("domaine : " + domains + "( ip :" + ipwork + ")");
 })};
-
 
 
 // Async function to call TAN API
@@ -157,8 +160,9 @@ apiRouter.route('/transport-nantes-api/public/lstLieus')
 		} */
 
 		
-		console.log("GET,All lieus - by " +  clientIp + ' / ' + getIdName(clientIp) +
+		console.log("GET,All lieus - by " +  clientIp +
 		" - le " + api_tan.getCurDateTime());
+		getIdName(clientIp);
 		myGenericMongoClient.genericFindList('lieus', {},function (err, lieus) {
 			res.send(lieus);
 		});//end of genericFindList()
