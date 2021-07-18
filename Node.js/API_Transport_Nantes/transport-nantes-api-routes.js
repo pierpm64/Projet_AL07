@@ -16,7 +16,13 @@ console.log('===> ip v4 : ' + address.ip() + " / ip v6  : " + address.ipv6())
 
 
 function getIdName(ip) {
-	require('dns').reverse(ip, function(err, domains) {
+	let ipTab = String(ip).split(':');
+	let ipwork = ipTab[ipTab.length-1];
+	let ipwork2 = ipwork.split('.');
+	if (ipwork2.length < 4) {
+		return "inconnu";
+	}
+	require('dns').reverse(ipwork, function(err, domains) {
     if(err) {
         return err.toString();
     }
