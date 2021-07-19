@@ -20,6 +20,10 @@ retour=function(par){console.log("demo :" + JSON.stringify(par))}) {
 
 // function de recherche des horaires planifiés pour tous les lieux, stations et lignes associées
 function getPlannedTime(curDate) { 
+         console.log('getPlannedTime - Début recherche horaires planifiés pour le  : ' + curDate + 
+                     " / run le : "  + api_tan.getCurDateTime() )
+
+        //  recherche dans MongoDB l'ensemble des lieux 
         api_mongoDB.genericFindList("lieus",{},
         function (err, lieus) {
             // console.log(JSON.stringify(lieus));
@@ -34,6 +38,9 @@ function getPlannedTime(curDate) {
                     }
                 }
             }
+
+            console.log('getPlannedTime - liste des stations analysées : ' + lstStation + 
+            " / le : "  + api_tan.getCurDateTime() )
 
             for (let station in lstStation) {
                 // console.log("station :" + station);
@@ -248,6 +255,7 @@ async function mainTask(parm="day")  {
             curDate = dateNow.getFullYear() + '-' + curMonth.toString().padStart(2,"0") +
             '-' + dateNow.getDate().toString().padStart(2,"0") 
 
+            console.log("Robot getPlannedTime - delete dans TanplannedTime pour {date : " + curDate+ "}")
             await api_mongoDB_v1.MongoDeleteData({date : curDate },'TanPlannedTime')
             getPlannedTime(curDate);
     }
