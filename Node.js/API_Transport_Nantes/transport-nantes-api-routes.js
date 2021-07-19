@@ -15,7 +15,7 @@ let serveurip = address.ip();
 console.log('===> plateforme : ' + process.platform + " / pid : " + process.ppid)
 console.log('===> ip v4 : ' + serveurip + " / ip v6  : " + address.ipv6())
 
-// fontion récupéation domaine à partir adresse IP
+// fonction récupération domaine à partir adresse IP et stockage en MongoDB
 function getIdName(ip,action="ListeLieux") {
 	let ipTab = String(ip).split(':');
 	let ipwork = ipTab[ipTab.length-1];
@@ -23,13 +23,13 @@ function getIdName(ip,action="ListeLieux") {
 	if (ipwork2.length < 4) {
 		return
 	}
-	
+
+	// reverse adresse Ip formatée
 	dns.reverse(ipwork, function(err, domains) {
     if(err) {
-		// console.log("errerur reverse" + err)
-        console.log("err:" + err);
+        console.log("err dns.reverse : " + err);
     }
-    console.log("domaine : " + domains + " ( ip :" + ipwork + ")");
+    console.log("domaine : " + domains + " (ip : " + ipwork + " )");
 	// Création objet trace
 	let objtrace =  {
 		"IPAddress" : ip,
@@ -38,7 +38,7 @@ function getIdName(ip,action="ListeLieux") {
 		"action" : action,
 		"date" : new Date()
 	}
-	// 2 - Insertions en base
+	// Insertion en base
 	myGenericMongoClient.genericInsertOne('ActionsTrace',
 	objtrace,
 	function (err, eId) {
@@ -407,5 +407,25 @@ apiRouter.route('/transport-nantes-api/public/favoris')
 		}
 		});
 });
+
+// Recuperation liste des trace
+//exemple URL: http://localhost:8282/transport-nantes-api/public/acttrace?action=...
+//  (retoune les horaires prévus)
+apiRouter.route('/transport-nantes-api/public/acttrace')
+	.get(function (req, res, next) {
+		var action  = req.query.action;
+		let querytest = {};
+		if (action !== undefined) {
+			querytest["action"] = action;
+		}
+
+		console.log("GET,ActionsTrace,Query:" + JSON.stringify(querytest));
+		// Recherche infos dans MongoDB
+		myGenericMongoClient.genericFindList('ActionsTrace',querytest,
+			function (err, actTrace) {
+				res.send(actTrace);
+		})
+		;//end of get ActTrace
+	});
 		
 exports.apiRouter = apiRouter;
