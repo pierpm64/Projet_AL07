@@ -15,7 +15,8 @@ let serveurip = address.ip();
 console.log('===> plateforme : ' + process.platform + " / pid : " + process.ppid)
 console.log('===> ip v4 : ' + serveurip + " / ip v6  : " + address.ipv6())
 
-function getIdName(ip) {
+// fontion récupéation domaine à partir adresse IP
+function getIdName(ip,action="ListeLieux") {
 	let ipTab = String(ip).split(':');
 	let ipwork = ipTab[ipTab.length-1];
 	let ipwork2 = ipwork.split('.');
@@ -29,6 +30,20 @@ function getIdName(ip) {
         console.log("err:" + err);
     }
     console.log("domaine : " + domains + " ( ip :" + ipwork + ")");
+	// Création objet trace
+	let objtrace =  {
+		"IPAddress" : ip,
+		"IPshort" : ipwork,
+		"domaine" : domains,
+		"action" : action,
+		"date" : new Date()
+	}
+	// 2 - Insertions en base
+	myGenericMongoClient.genericInsertOne('ActionsTrace',
+	objtrace,
+	function (err, eId) {
+	// message insert
+	});
 })};
 
 
