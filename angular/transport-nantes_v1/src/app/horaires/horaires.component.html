@@ -45,7 +45,7 @@
 </div>
 
     <div class="row" >
-        <div class="col-12 col-md-4 col-xl-4">
+        <div class="col-12 col-md-6 col-xl-6">
             <label for="lstTrajet">Choisissez une Ligne : </label>
 
             <select name="lstTrajet" [(ngModel)]="Selectedligne" (ngModelChange)="onTrajetChange($event)">
@@ -55,7 +55,7 @@
             </select>
         </div>
         <!--<div class="col-1 col-md-1 col-xl-1"></div>-->
-        <div class="col-12 col-md-6 col-xl-4">
+        <div class="col-9 col-md-4 col-xl-4">
 
             <label for="lstDates">Choissez une Date: </label>
 
@@ -64,9 +64,9 @@
             </select>
         </div>
 
-        <div class="col-1 col-md-1 col-xl-3"></div>
+        <div class="col-1 col-md-1 col-xl-1"></div>
 
-        <div *ngIf="ReqParm;else retour2" class="col-1 col-md-1 col-xl-1" >
+        <div *ngIf="ReqParm;else retour2" class="col-2 col-md-1 col-xl-1" >
                 <a role="button" class="btn btn-outline-secondary btn-sm " 
                 [routerLink]="['/myStations']" >Mes Stations</a>
 
@@ -74,7 +74,7 @@
         
 
         <ng-template #retour2>
-            <div class="col-1 col-md-1 col-xl-1">
+            <div class="col-2 col-md-1 col-xl-1">
                 <a role="button" class="btn btn-outline-secondary btn-sm " 
                 [routerLink]="['/allplaces']" >retour liste lieux</a>
             </div>
