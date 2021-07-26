@@ -49,9 +49,9 @@ export class WelcomeComponent implements OnInit {
       this.images.push(imgUrl);
 
     }
+    // console.log(JSON.stringify(this.images));
     //
     this.location.replaceState('/');
-    console.log(JSON.stringify(this.images));
     // Recuperation browser et version :
     this.ipAddress = window.location.origin;
     // Formatage date et heure en francais
@@ -62,8 +62,8 @@ export class WelcomeComponent implements OnInit {
     this.loginInfoStr = sessionStorage.getItem('curUser');
     if (this.loginInfoStr != null) {
       this.loginInfo = JSON.parse(this.loginInfoStr);
-      console.log("email : " + this.loginInfo["email"]  + " / isadmin : " 
-      + this.loginInfo["isAdmin"])
+      //console.log("email : " + this.loginInfo["email"]  + " / isadmin : " 
+      // + this.loginInfo["isAdmin"])
       this.isAdmin = this.loginInfo["isAdmin"];
     }
 

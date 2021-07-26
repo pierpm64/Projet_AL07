@@ -19,7 +19,7 @@ export class FooterComponent implements OnInit {
 
   public browser : String = "Non Reconnu";
 
-  public listeCouleurs : string[] = [ "green", "DarkGreen","ForestGreen",
+  public listeCouleurs : string[] = [ "green", "DarkGreen","ForestGreen","CadetBlue","DarkCyan",
   "blue", "Navy","DarkBlue","MidnightBlue",'LimeGreen'] ;
 
 
@@ -86,7 +86,7 @@ export class FooterComponent implements OnInit {
   
   myBrowser() { 
     let Agent = navigator.userAgent;
-    console.log('browser agent : ' + Agent)
+    console.log('browser agent : ' + Agent);
     if((Agent.indexOf("Opera") || Agent.indexOf('OPR')) != -1 ) {
         return 'Opera';
     }else if(Agent.indexOf("Edg") != -1 ){
